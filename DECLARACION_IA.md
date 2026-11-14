@@ -4,8 +4,8 @@
 
 Completar antes de la entrega.
 
-- Nombre:
-- Nombre:
+- Nombre: Iván Paredes
+- Nombre: Lujan Melgarejo
 
 ## Herramientas
 
@@ -14,12 +14,3 @@ El código de este repositorio se generó con Cursor (modelo Grok) a partir del 
 El programa, al ejecutarse, no llama a un modelo ni sustituye el analizador por una consulta que devuelva las etiquetas. Cada resultado sale del léxico, de la tabla de símbolos, del parser y de las acciones semánticas descritas en [INFORME.md](INFORME.md).
 
 No se usa ninguna biblioteca de terceros. Solo la biblioteca estándar de Python 3.11 o posterior (`argparse`, `json`, `re`, `unicodedata`, `unittest`, `dataclasses`, `pathlib`).
-
-## Contribuciones
-
-Cada integrante tiene que poder explicar en la defensa una ejecución, la traza y una modificación breve de una regla. Completar esta tabla con lo que cada persona preparó.
-
-| Integrante | Parte que va a explicar |
-| --- | --- |
-|  |  |
-|  |  |

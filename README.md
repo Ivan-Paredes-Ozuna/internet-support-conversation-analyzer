@@ -45,7 +45,7 @@ Cada turno lleva número consecutivo desde 1, rol `CLIENTE` o `AGENTE`, dos punt
 - Recuperación de turnos: [src/analizador.py](src/analizador.py)
 - JSON, consola y traza: [src/salida.py](src/salida.py), [src/traza.py](src/traza.py)
 
-El informe de las decisiones está en [INFORME.md](INFORME.md). La declaración de IA, en [DECLARACION_IA.md](DECLARACION_IA.md).
+El informe de las decisiones está en [INFORME.md](INFORME.md). Para entregar, el mismo contenido va en PDF, con los resultados obtenidos, la traza y el lugar para los nombres: [entrega/Informe_tecnico_TP1.pdf](entrega/Informe_tecnico_TP1.pdf). La declaración de IA, en [DECLARACION_IA.md](DECLARACION_IA.md).
 
 ## Casos
 
