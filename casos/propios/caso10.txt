@@ -1,0 +1,3 @@
+SESION S10
+1 CLIENTE: La conxion se corta.
+FIN

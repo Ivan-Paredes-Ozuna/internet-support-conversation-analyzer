@@ -1,0 +1,7 @@
+SESION S11
+1 CLIENTE: El servicio está lento.
+3 CLIENTE: Ahora funciona bien.
+FIN
+SESION S11B
+1 CLIENTE: Gracias.
+FIN

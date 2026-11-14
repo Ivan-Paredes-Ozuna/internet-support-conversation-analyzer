@@ -1,0 +1,66 @@
+# Vocabulario canónico del dominio.
+# [correccion]: lemas que el corrector puede proponer (distancia 1, candidato único).
+# [cerrada]: clases cerradas. Se reconocen exactas y no son destino de corrección.
+# «lenta» y «lento» conviven a propósito: «lent» empata y no se corrige.
+
+[correccion]
+servicio SUST_SERVICIO
+internet SUST_SERVICIO
+conexion SUST_SERVICIO
+router SUST_SERVICIO
+red SUST_SERVICIO
+wifi SUST_SERVICIO
+lento ADJ_NEG
+lenta ADJ_NEG
+mal ADJ_NEG
+funciona FUNCIONA
+funcionar FUNCIONA
+corta CORTA
+corto CORTA
+cortan CORTA
+bien BIEN
+amable ADJ_ATENCION
+buena ADJ_ATENCION
+bueno ADJ_ATENCION
+atendiste V_ATENCION
+atendio V_ATENCION
+entendi V_CLARIDAD
+explicacion SUST_CLARIDAD
+claridad SUST_CLARIDAD
+atencion SUST_ATENCION
+trato SUST_ATENCION
+reinicie V_SOLICITUD
+reinicia V_SOLICITUD
+reinicien V_SOLICITUD
+revisaremos V_COMPROMISO
+revisare V_COMPROMISO
+sigue V_PERS
+sigo V_PERS
+agente AGENTE_SUST
+
+[cerrada]
+el ART
+la ART
+los ART
+las ART
+un ART
+una ART
+me ME
+se SE
+de PREP
+sin SIN
+con PREP
+por PREP
+esta COPULA
+fue COPULA
+es COPULA
+son COPULA
+pero PERO
+muy MUY
+no NO
+ahora AHORA
+manana MANANA
+hoy HOY
+todos TODOS
+dias DIAS
+gracias CORTESIA

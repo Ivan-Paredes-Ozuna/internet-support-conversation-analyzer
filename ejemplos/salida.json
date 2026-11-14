@@ -1,0 +1,898 @@
+{
+  "sesiones": [
+    {
+      "id": "S01",
+      "analisis": "completo",
+      "valoraciones_por_turno": [
+        {
+          "turno": 1,
+          "rol": "CLIENTE",
+          "texto": "El servicio está lento.",
+          "aspectos": [
+            {
+              "aspecto": "SERVICIO",
+              "valoracion": "NEGATIVA",
+              "regla": "R1",
+              "fragmento": "El servicio está lento",
+              "actor": "CLIENTE"
+            }
+          ],
+          "no_interpretados": []
+        },
+        {
+          "turno": 2,
+          "rol": "AGENTE",
+          "texto": "Reinicie el router.",
+          "aspectos": [],
+          "no_interpretados": []
+        },
+        {
+          "turno": 3,
+          "rol": "CLIENTE",
+          "texto": "Ahora funciona bien.",
+          "aspectos": [
+            {
+              "aspecto": "SERVICIO",
+              "valoracion": "POSITIVA",
+              "regla": "R2",
+              "fragmento": "Ahora funciona bien",
+              "actor": "CLIENTE"
+            }
+          ],
+          "no_interpretados": []
+        }
+      ],
+      "resumen_por_aspecto": {
+        "SERVICIO": "MIXTA",
+        "ATENCION": "SIN_EVIDENCIA",
+        "CLARIDAD": "SIN_EVIDENCIA"
+      },
+      "estado": "RESUELTO",
+      "entidades": {
+        "participantes": [
+          "AGENTE",
+          "CLIENTE"
+        ],
+        "tickets": []
+      },
+      "correcciones": [],
+      "abstenciones": [],
+      "errores": [],
+      "evidencias": [
+        {
+          "turno": 1,
+          "texto": "El servicio está lento",
+          "regla": "R1",
+          "actor": "CLIENTE",
+          "aspecto": "SERVICIO",
+          "valoracion": "NEGATIVA",
+          "efecto": "FALLA",
+          "negado": false
+        },
+        {
+          "turno": 2,
+          "texto": "Reinicie el router",
+          "regla": "R12",
+          "actor": "AGENTE",
+          "aspecto": null,
+          "valoracion": null,
+          "efecto": "SOLICITUD",
+          "negado": false
+        },
+        {
+          "turno": 3,
+          "texto": "Ahora funciona bien",
+          "regla": "R2",
+          "actor": "CLIENTE",
+          "aspecto": "SERVICIO",
+          "valoracion": "POSITIVA",
+          "efecto": "RECUPERACION",
+          "negado": false
+        }
+      ]
+    },
+    {
+      "id": "S02",
+      "analisis": "completo",
+      "valoraciones_por_turno": [
+        {
+          "turno": 1,
+          "rol": "CLIENTE",
+          "texto": "Me atendiste muy bien, pero sigo sin internet.",
+          "aspectos": [
+            {
+              "aspecto": "ATENCION",
+              "valoracion": "POSITIVA",
+              "regla": "R9",
+              "fragmento": "Me atendiste muy bien",
+              "actor": "CLIENTE"
+            },
+            {
+              "aspecto": "SERVICIO",
+              "valoracion": "NEGATIVA",
+              "regla": "R8",
+              "fragmento": "sigo sin internet",
+              "actor": "CLIENTE"
+            }
+          ],
+          "no_interpretados": []
+        }
+      ],
+      "resumen_por_aspecto": {
+        "SERVICIO": "NEGATIVA",
+        "ATENCION": "POSITIVA",
+        "CLARIDAD": "SIN_EVIDENCIA"
+      },
+      "estado": "NO_RESUELTO",
+      "entidades": {
+        "participantes": [
+          "CLIENTE"
+        ],
+        "tickets": []
+      },
+      "correcciones": [],
+      "abstenciones": [],
+      "errores": [],
+      "evidencias": [
+        {
+          "turno": 1,
+          "texto": "Me atendiste muy bien",
+          "regla": "R9",
+          "actor": "CLIENTE",
+          "aspecto": "ATENCION",
+          "valoracion": "POSITIVA",
+          "efecto": null,
+          "negado": false
+        },
+        {
+          "turno": 1,
+          "texto": "sigo sin internet",
+          "regla": "R8",
+          "actor": "CLIENTE",
+          "aspecto": "SERVICIO",
+          "valoracion": "NEGATIVA",
+          "efecto": "FALLA",
+          "negado": false
+        }
+      ]
+    },
+    {
+      "id": "S03",
+      "analisis": "completo",
+      "valoraciones_por_turno": [
+        {
+          "turno": 1,
+          "rol": "CLIENTE",
+          "texto": "Ahora funciona, pero se corta todos los días.",
+          "aspectos": [
+            {
+              "aspecto": "SERVICIO",
+              "valoracion": "POSITIVA",
+              "regla": "R2",
+              "fragmento": "Ahora funciona",
+              "actor": "CLIENTE"
+            },
+            {
+              "aspecto": "SERVICIO",
+              "valoracion": "NEGATIVA",
+              "regla": "R6",
+              "fragmento": "se corta todos los días",
+              "actor": "CLIENTE"
+            }
+          ],
+          "no_interpretados": []
+        }
+      ],
+      "resumen_por_aspecto": {
+        "SERVICIO": "MIXTA",
+        "ATENCION": "SIN_EVIDENCIA",
+        "CLARIDAD": "SIN_EVIDENCIA"
+      },
+      "estado": "TEMPORAL",
+      "entidades": {
+        "participantes": [
+          "CLIENTE"
+        ],
+        "tickets": []
+      },
+      "correcciones": [],
+      "abstenciones": [],
+      "errores": [],
+      "evidencias": [
+        {
+          "turno": 1,
+          "texto": "Ahora funciona",
+          "regla": "R2",
+          "actor": "CLIENTE",
+          "aspecto": "SERVICIO",
+          "valoracion": "POSITIVA",
+          "efecto": "RECUPERACION",
+          "negado": false
+        },
+        {
+          "turno": 1,
+          "texto": "se corta todos los días",
+          "regla": "R6",
+          "actor": "CLIENTE",
+          "aspecto": "SERVICIO",
+          "valoracion": "NEGATIVA",
+          "efecto": "RECURRENCIA",
+          "negado": false
+        }
+      ]
+    },
+    {
+      "id": "S04",
+      "analisis": "completo",
+      "valoraciones_por_turno": [
+        {
+          "turno": 1,
+          "rol": "CLIENTE",
+          "texto": "No entendí la explicación, pero el agente fue amable.",
+          "aspectos": [
+            {
+              "aspecto": "CLARIDAD",
+              "valoracion": "NEGATIVA",
+              "regla": "R11",
+              "fragmento": "No entendí la explicación",
+              "actor": "CLIENTE"
+            },
+            {
+              "aspecto": "ATENCION",
+              "valoracion": "POSITIVA",
+              "regla": "R10",
+              "fragmento": "el agente fue amable",
+              "actor": "CLIENTE"
+            }
+          ],
+          "no_interpretados": []
+        }
+      ],
+      "resumen_por_aspecto": {
+        "SERVICIO": "SIN_EVIDENCIA",
+        "ATENCION": "POSITIVA",
+        "CLARIDAD": "NEGATIVA"
+      },
+      "estado": "NO_CONFIRMADO",
+      "entidades": {
+        "participantes": [
+          "CLIENTE"
+        ],
+        "tickets": []
+      },
+      "correcciones": [],
+      "abstenciones": [],
+      "errores": [],
+      "evidencias": [
+        {
+          "turno": 1,
+          "texto": "No entendí la explicación",
+          "regla": "R11",
+          "actor": "CLIENTE",
+          "aspecto": "CLARIDAD",
+          "valoracion": "NEGATIVA",
+          "efecto": null,
+          "negado": true
+        },
+        {
+          "turno": 1,
+          "texto": "el agente fue amable",
+          "regla": "R10",
+          "actor": "CLIENTE",
+          "aspecto": "ATENCION",
+          "valoracion": "POSITIVA",
+          "efecto": null,
+          "negado": false
+        }
+      ]
+    },
+    {
+      "id": "S05",
+      "analisis": "completo",
+      "valoraciones_por_turno": [
+        {
+          "turno": 1,
+          "rol": "CLIENTE",
+          "texto": "El internet está lentto.",
+          "aspectos": [
+            {
+              "aspecto": "SERVICIO",
+              "valoracion": "NEGATIVA",
+              "regla": "R1",
+              "fragmento": "El internet está lentto",
+              "actor": "CLIENTE"
+            }
+          ],
+          "no_interpretados": []
+        },
+        {
+          "turno": 2,
+          "rol": "AGENTE",
+          "texto": "Quedó registrado el ticket TK-204.",
+          "aspectos": [],
+          "no_interpretados": [
+            "Quedó registrado el ticket"
+          ]
+        }
+      ],
+      "resumen_por_aspecto": {
+        "SERVICIO": "NEGATIVA",
+        "ATENCION": "SIN_EVIDENCIA",
+        "CLARIDAD": "SIN_EVIDENCIA"
+      },
+      "estado": "NO_RESUELTO",
+      "entidades": {
+        "participantes": [
+          "AGENTE",
+          "CLIENTE"
+        ],
+        "tickets": [
+          {
+            "id": "TK-204",
+            "apariciones": [
+              {
+                "turno": 2,
+                "desplazamiento": 27
+              }
+            ]
+          }
+        ]
+      },
+      "correcciones": [
+        {
+          "turno": 1,
+          "original": "lentto",
+          "corregido": "lento",
+          "distancia": 1
+        }
+      ],
+      "abstenciones": [],
+      "errores": [],
+      "evidencias": [
+        {
+          "turno": 1,
+          "texto": "El internet está lentto",
+          "regla": "R1",
+          "actor": "CLIENTE",
+          "aspecto": "SERVICIO",
+          "valoracion": "NEGATIVA",
+          "efecto": "FALLA",
+          "negado": false
+        }
+      ]
+    },
+    {
+      "id": "S06",
+      "analisis": "completo",
+      "valoraciones_por_turno": [
+        {
+          "turno": 1,
+          "rol": "AGENTE",
+          "texto": "Mañana revisaremos TK-205.",
+          "aspectos": [],
+          "no_interpretados": []
+        },
+        {
+          "turno": 2,
+          "rol": "CLIENTE",
+          "texto": "Gracias.",
+          "aspectos": [],
+          "no_interpretados": []
+        }
+      ],
+      "resumen_por_aspecto": {
+        "SERVICIO": "SIN_EVIDENCIA",
+        "ATENCION": "SIN_EVIDENCIA",
+        "CLARIDAD": "SIN_EVIDENCIA"
+      },
+      "estado": "PENDIENTE",
+      "entidades": {
+        "participantes": [
+          "AGENTE",
+          "CLIENTE"
+        ],
+        "tickets": [
+          {
+            "id": "TK-205",
+            "apariciones": [
+              {
+                "turno": 1,
+                "desplazamiento": 19
+              }
+            ]
+          }
+        ]
+      },
+      "correcciones": [],
+      "abstenciones": [],
+      "errores": [],
+      "evidencias": [
+        {
+          "turno": 1,
+          "texto": "Mañana revisaremos TK-205",
+          "regla": "R13",
+          "actor": "AGENTE",
+          "aspecto": null,
+          "valoracion": null,
+          "efecto": "COMPROMISO",
+          "negado": false
+        },
+        {
+          "turno": 2,
+          "texto": "Gracias",
+          "regla": "R14",
+          "actor": "CLIENTE",
+          "aspecto": null,
+          "valoracion": null,
+          "efecto": "CORTESIA",
+          "negado": false
+        }
+      ]
+    },
+    {
+      "id": "S07",
+      "analisis": "parcial",
+      "valoraciones_por_turno": [
+        {
+          "turno": 1,
+          "rol": "CLIENTE",
+          "texto": "El servicio está lento.",
+          "aspectos": [
+            {
+              "aspecto": "SERVICIO",
+              "valoracion": "NEGATIVA",
+              "regla": "R1",
+              "fragmento": "El servicio está lento",
+              "actor": "CLIENTE"
+            }
+          ],
+          "no_interpretados": []
+        },
+        {
+          "turno": 3,
+          "rol": "AGENTE",
+          "texto": "Reinicie el router.",
+          "aspectos": [],
+          "no_interpretados": []
+        }
+      ],
+      "resumen_por_aspecto": {
+        "SERVICIO": "NEGATIVA",
+        "ATENCION": "SIN_EVIDENCIA",
+        "CLARIDAD": "SIN_EVIDENCIA"
+      },
+      "estado": "NO_RESUELTO",
+      "entidades": {
+        "participantes": [
+          "AGENTE",
+          "CLIENTE"
+        ],
+        "tickets": []
+      },
+      "correcciones": [],
+      "abstenciones": [],
+      "errores": [
+        {
+          "linea": 3,
+          "tipo": "ROL_INVALIDO",
+          "texto": "2 SOPORTE: Intentamos ayudar."
+        }
+      ],
+      "evidencias": [
+        {
+          "turno": 1,
+          "texto": "El servicio está lento",
+          "regla": "R1",
+          "actor": "CLIENTE",
+          "aspecto": "SERVICIO",
+          "valoracion": "NEGATIVA",
+          "efecto": "FALLA",
+          "negado": false
+        },
+        {
+          "turno": 3,
+          "texto": "Reinicie el router",
+          "regla": "R12",
+          "actor": "AGENTE",
+          "aspecto": null,
+          "valoracion": null,
+          "efecto": "SOLICITUD",
+          "negado": false
+        }
+      ]
+    },
+    {
+      "id": "S07B",
+      "analisis": "completo",
+      "valoraciones_por_turno": [
+        {
+          "turno": 1,
+          "rol": "CLIENTE",
+          "texto": "Ahora funciona bien.",
+          "aspectos": [
+            {
+              "aspecto": "SERVICIO",
+              "valoracion": "POSITIVA",
+              "regla": "R2",
+              "fragmento": "Ahora funciona bien",
+              "actor": "CLIENTE"
+            }
+          ],
+          "no_interpretados": []
+        }
+      ],
+      "resumen_por_aspecto": {
+        "SERVICIO": "POSITIVA",
+        "ATENCION": "SIN_EVIDENCIA",
+        "CLARIDAD": "SIN_EVIDENCIA"
+      },
+      "estado": "RESUELTO",
+      "entidades": {
+        "participantes": [
+          "CLIENTE"
+        ],
+        "tickets": []
+      },
+      "correcciones": [],
+      "abstenciones": [],
+      "errores": [],
+      "evidencias": [
+        {
+          "turno": 1,
+          "texto": "Ahora funciona bien",
+          "regla": "R2",
+          "actor": "CLIENTE",
+          "aspecto": "SERVICIO",
+          "valoracion": "POSITIVA",
+          "efecto": "RECUPERACION",
+          "negado": false
+        }
+      ]
+    },
+    {
+      "id": "S08",
+      "analisis": "completo",
+      "valoraciones_por_turno": [
+        {
+          "turno": 1,
+          "rol": "CLIENTE",
+          "texto": "lent.",
+          "aspectos": [],
+          "no_interpretados": [
+            "lent"
+          ]
+        }
+      ],
+      "resumen_por_aspecto": {
+        "SERVICIO": "SIN_EVIDENCIA",
+        "ATENCION": "SIN_EVIDENCIA",
+        "CLARIDAD": "SIN_EVIDENCIA"
+      },
+      "estado": "NO_CONFIRMADO",
+      "entidades": {
+        "participantes": [
+          "CLIENTE"
+        ],
+        "tickets": []
+      },
+      "correcciones": [],
+      "abstenciones": [
+        {
+          "turno": 1,
+          "original": "lent",
+          "candidatos": [
+            "lenta",
+            "lento"
+          ]
+        }
+      ],
+      "errores": [],
+      "evidencias": []
+    },
+    {
+      "id": "S09",
+      "analisis": "completo",
+      "valoraciones_por_turno": [
+        {
+          "turno": 1,
+          "rol": "CLIENTE",
+          "texto": "No funciona el internet, pero la atención fue muy buena.",
+          "aspectos": [
+            {
+              "aspecto": "SERVICIO",
+              "valoracion": "NEGATIVA",
+              "regla": "R4",
+              "fragmento": "No funciona el internet",
+              "actor": "CLIENTE"
+            },
+            {
+              "aspecto": "ATENCION",
+              "valoracion": "POSITIVA",
+              "regla": "R16",
+              "fragmento": "la atención fue muy buena",
+              "actor": "CLIENTE"
+            }
+          ],
+          "no_interpretados": []
+        }
+      ],
+      "resumen_por_aspecto": {
+        "SERVICIO": "NEGATIVA",
+        "ATENCION": "POSITIVA",
+        "CLARIDAD": "SIN_EVIDENCIA"
+      },
+      "estado": "NO_RESUELTO",
+      "entidades": {
+        "participantes": [
+          "CLIENTE"
+        ],
+        "tickets": []
+      },
+      "correcciones": [],
+      "abstenciones": [],
+      "errores": [],
+      "evidencias": [
+        {
+          "turno": 1,
+          "texto": "No funciona el internet",
+          "regla": "R4",
+          "actor": "CLIENTE",
+          "aspecto": "SERVICIO",
+          "valoracion": "NEGATIVA",
+          "efecto": "FALLA",
+          "negado": true
+        },
+        {
+          "turno": 1,
+          "texto": "la atención fue muy buena",
+          "regla": "R16",
+          "actor": "CLIENTE",
+          "aspecto": "ATENCION",
+          "valoracion": "POSITIVA",
+          "efecto": null,
+          "negado": false
+        }
+      ]
+    },
+    {
+      "id": "S10",
+      "analisis": "completo",
+      "valoraciones_por_turno": [
+        {
+          "turno": 1,
+          "rol": "CLIENTE",
+          "texto": "La conxion se corta.",
+          "aspectos": [
+            {
+              "aspecto": "SERVICIO",
+              "valoracion": "NEGATIVA",
+              "regla": "R5",
+              "fragmento": "La conxion se corta",
+              "actor": "CLIENTE"
+            }
+          ],
+          "no_interpretados": []
+        }
+      ],
+      "resumen_por_aspecto": {
+        "SERVICIO": "NEGATIVA",
+        "ATENCION": "SIN_EVIDENCIA",
+        "CLARIDAD": "SIN_EVIDENCIA"
+      },
+      "estado": "NO_RESUELTO",
+      "entidades": {
+        "participantes": [
+          "CLIENTE"
+        ],
+        "tickets": []
+      },
+      "correcciones": [
+        {
+          "turno": 1,
+          "original": "conxion",
+          "corregido": "conexion",
+          "distancia": 1
+        }
+      ],
+      "abstenciones": [],
+      "errores": [],
+      "evidencias": [
+        {
+          "turno": 1,
+          "texto": "La conxion se corta",
+          "regla": "R5",
+          "actor": "CLIENTE",
+          "aspecto": "SERVICIO",
+          "valoracion": "NEGATIVA",
+          "efecto": "CORTE",
+          "negado": false
+        }
+      ]
+    },
+    {
+      "id": "S11",
+      "analisis": "parcial",
+      "valoraciones_por_turno": [
+        {
+          "turno": 1,
+          "rol": "CLIENTE",
+          "texto": "El servicio está lento.",
+          "aspectos": [
+            {
+              "aspecto": "SERVICIO",
+              "valoracion": "NEGATIVA",
+              "regla": "R1",
+              "fragmento": "El servicio está lento",
+              "actor": "CLIENTE"
+            }
+          ],
+          "no_interpretados": []
+        }
+      ],
+      "resumen_por_aspecto": {
+        "SERVICIO": "NEGATIVA",
+        "ATENCION": "SIN_EVIDENCIA",
+        "CLARIDAD": "SIN_EVIDENCIA"
+      },
+      "estado": "NO_RESUELTO",
+      "entidades": {
+        "participantes": [
+          "CLIENTE"
+        ],
+        "tickets": []
+      },
+      "correcciones": [],
+      "abstenciones": [],
+      "errores": [
+        {
+          "linea": 3,
+          "tipo": "ORDEN_INCONSISTENTE",
+          "texto": "3 CLIENTE: Ahora funciona bien."
+        }
+      ],
+      "evidencias": [
+        {
+          "turno": 1,
+          "texto": "El servicio está lento",
+          "regla": "R1",
+          "actor": "CLIENTE",
+          "aspecto": "SERVICIO",
+          "valoracion": "NEGATIVA",
+          "efecto": "FALLA",
+          "negado": false
+        }
+      ]
+    },
+    {
+      "id": "S11B",
+      "analisis": "completo",
+      "valoraciones_por_turno": [
+        {
+          "turno": 1,
+          "rol": "CLIENTE",
+          "texto": "Gracias.",
+          "aspectos": [],
+          "no_interpretados": []
+        }
+      ],
+      "resumen_por_aspecto": {
+        "SERVICIO": "SIN_EVIDENCIA",
+        "ATENCION": "SIN_EVIDENCIA",
+        "CLARIDAD": "SIN_EVIDENCIA"
+      },
+      "estado": "NO_CONFIRMADO",
+      "entidades": {
+        "participantes": [
+          "CLIENTE"
+        ],
+        "tickets": []
+      },
+      "correcciones": [],
+      "abstenciones": [],
+      "errores": [],
+      "evidencias": [
+        {
+          "turno": 1,
+          "texto": "Gracias",
+          "regla": "R14",
+          "actor": "CLIENTE",
+          "aspecto": null,
+          "valoracion": null,
+          "efecto": "CORTESIA",
+          "negado": false
+        }
+      ]
+    },
+    {
+      "id": "S12",
+      "analisis": "completo",
+      "valoraciones_por_turno": [
+        {
+          "turno": 1,
+          "rol": "CLIENTE",
+          "texto": "La conexion está lenta.",
+          "aspectos": [
+            {
+              "aspecto": "SERVICIO",
+              "valoracion": "NEGATIVA",
+              "regla": "R1",
+              "fragmento": "La conexion está lenta",
+              "actor": "CLIENTE"
+            }
+          ],
+          "no_interpretados": []
+        },
+        {
+          "turno": 2,
+          "rol": "AGENTE",
+          "texto": "Reinicie el router.",
+          "aspectos": [],
+          "no_interpretados": []
+        },
+        {
+          "turno": 3,
+          "rol": "CLIENTE",
+          "texto": "Ahora funciona bien.",
+          "aspectos": [
+            {
+              "aspecto": "SERVICIO",
+              "valoracion": "POSITIVA",
+              "regla": "R2",
+              "fragmento": "Ahora funciona bien",
+              "actor": "CLIENTE"
+            }
+          ],
+          "no_interpretados": []
+        }
+      ],
+      "resumen_por_aspecto": {
+        "SERVICIO": "MIXTA",
+        "ATENCION": "SIN_EVIDENCIA",
+        "CLARIDAD": "SIN_EVIDENCIA"
+      },
+      "estado": "RESUELTO",
+      "entidades": {
+        "participantes": [
+          "AGENTE",
+          "CLIENTE"
+        ],
+        "tickets": []
+      },
+      "correcciones": [],
+      "abstenciones": [],
+      "errores": [],
+      "evidencias": [
+        {
+          "turno": 1,
+          "texto": "La conexion está lenta",
+          "regla": "R1",
+          "actor": "CLIENTE",
+          "aspecto": "SERVICIO",
+          "valoracion": "NEGATIVA",
+          "efecto": "FALLA",
+          "negado": false
+        },
+        {
+          "turno": 2,
+          "texto": "Reinicie el router",
+          "regla": "R12",
+          "actor": "AGENTE",
+          "aspecto": null,
+          "valoracion": null,
+          "efecto": "SOLICITUD",
+          "negado": false
+        },
+        {
+          "turno": 3,
+          "texto": "Ahora funciona bien",
+          "regla": "R2",
+          "actor": "CLIENTE",
+          "aspecto": "SERVICIO",
+          "valoracion": "POSITIVA",
+          "efecto": "RECUPERACION",
+          "negado": false
+        }
+      ]
+    }
+  ]
+}

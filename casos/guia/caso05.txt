@@ -1,0 +1,4 @@
+SESION S05
+1 CLIENTE: El internet está lentto.
+2 AGENTE: Quedó registrado el ticket TK-204.
+FIN

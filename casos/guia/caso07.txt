@@ -1,0 +1,8 @@
+SESION S07
+1 CLIENTE: El servicio está lento.
+2 SOPORTE: Intentamos ayudar.
+3 AGENTE: Reinicie el router.
+FIN
+SESION S07B
+1 CLIENTE: Ahora funciona bien.
+FIN

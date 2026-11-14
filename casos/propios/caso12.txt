@@ -1,0 +1,5 @@
+SESION S12
+1 CLIENTE: La conexion está lenta.
+2 AGENTE: Reinicie el router.
+3 CLIENTE: Ahora funciona bien.
+FIN
