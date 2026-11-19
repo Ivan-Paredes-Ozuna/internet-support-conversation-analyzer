@@ -1,0 +1,36 @@
+Sesión S06 — completo — estado PENDIENTE
+  SERVICIO: SIN_EVIDENCIA
+  ATENCION: SIN_EVIDENCIA
+  CLARIDAD: SIN_EVIDENCIA
+  Tickets: TK-205
+  Turno 1 AGENTE: Mañana revisaremos TK-205.
+    COMPROMISO (R13) «Mañana revisaremos TK-205»
+  Turno 2 CLIENTE: Gracias.
+    CORTESIA (R14) «Gracias»
+
+=== Traza S06 ===
+Tabla: buscar S06 — ausente
+Tabla: insertar S06 — alta tipo sesion
+--- Turno 1 AGENTE ---
+Texto original: Mañana revisaremos TK-205.
+Tokens:
+  MANANA 'Mañana'→manana @S06/t1/d0
+  V_COMPROMISO 'revisaremos'→revisaremos @S06/t1/d7
+  TICKET 'TK-205'→TK-205 @S06/t1/d19
+Estructura reconocida:
+  R13 aspecto=— valoracion=— efecto=COMPROMISO negado=False «Mañana revisaremos TK-205»
+Tabla: t1 buscar AGENTE — ausente
+Tabla: t1 insertar AGENTE — alta tipo participante
+Tabla: t1 buscar TK-205 — ausente
+Tabla: t1 insertar TK-205 — alta tipo ticket
+Acción semántica: R13 actor=AGENTE aspecto=— valoracion=— efecto=COMPROMISO negado=False «Mañana revisaremos TK-205»
+--- Turno 2 CLIENTE ---
+Texto original: Gracias.
+Tokens:
+  CORTESIA 'Gracias'→gracias @S06/t2/d0
+Estructura reconocida:
+  R14 aspecto=— valoracion=— efecto=CORTESIA negado=False «Gracias»
+Tabla: t2 buscar CLIENTE — ausente
+Tabla: t2 insertar CLIENTE — alta tipo participante
+Acción semántica: R14 actor=CLIENTE aspecto=— valoracion=— efecto=CORTESIA negado=False «Gracias»
+Resultado: análisis completo; estado PENDIENTE; SERVICIO SIN_EVIDENCIA, ATENCION SIN_EVIDENCIA, CLARIDAD SIN_EVIDENCIA

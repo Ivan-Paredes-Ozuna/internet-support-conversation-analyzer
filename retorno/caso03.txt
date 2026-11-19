@@ -1,0 +1,30 @@
+Sesión S03 — completo — estado TEMPORAL
+  SERVICIO: MIXTA
+  ATENCION: SIN_EVIDENCIA
+  CLARIDAD: SIN_EVIDENCIA
+  Turno 1 CLIENTE: Ahora funciona, pero se corta todos los días.
+    SERVICIO POSITIVA (R2) «Ahora funciona»
+    SERVICIO NEGATIVA (R6) «se corta todos los días»
+
+=== Traza S03 ===
+Tabla: buscar S03 — ausente
+Tabla: insertar S03 — alta tipo sesion
+--- Turno 1 CLIENTE ---
+Texto original: Ahora funciona, pero se corta todos los días.
+Tokens:
+  AHORA 'Ahora'→ahora @S03/t1/d0
+  FUNCIONA 'funciona'→funciona @S03/t1/d6
+  PERO 'pero'→pero @S03/t1/d16
+  SE 'se'→se @S03/t1/d21
+  CORTA 'corta'→corta @S03/t1/d24
+  TODOS 'todos'→todos @S03/t1/d30
+  ART 'los'→los @S03/t1/d36
+  DIAS 'días'→dias @S03/t1/d40
+Estructura reconocida:
+  R2 aspecto=SERVICIO valoracion=POSITIVA efecto=RECUPERACION negado=False «Ahora funciona»
+  R6 aspecto=SERVICIO valoracion=NEGATIVA efecto=RECURRENCIA negado=False «se corta todos los días»
+Tabla: t1 buscar CLIENTE — ausente
+Tabla: t1 insertar CLIENTE — alta tipo participante
+Acción semántica: R2 actor=CLIENTE aspecto=SERVICIO valoracion=POSITIVA efecto=RECUPERACION negado=False «Ahora funciona»
+Acción semántica: R6 actor=CLIENTE aspecto=SERVICIO valoracion=NEGATIVA efecto=RECURRENCIA negado=False «se corta todos los días»
+Resultado: análisis completo; estado TEMPORAL; SERVICIO MIXTA, ATENCION SIN_EVIDENCIA, CLARIDAD SIN_EVIDENCIA

@@ -1,0 +1,42 @@
+Sesión S05 — completo — estado NO_RESUELTO
+  SERVICIO: NEGATIVA
+  ATENCION: SIN_EVIDENCIA
+  CLARIDAD: SIN_EVIDENCIA
+  Tickets: TK-204
+  Corrección t1: lentto → lento
+  Turno 1 CLIENTE: El internet está lentto.
+    SERVICIO NEGATIVA (R1) «El internet está lentto»
+  Turno 2 AGENTE: Quedó registrado el ticket TK-204.
+    NO_INTERPRETADO «Quedó registrado el ticket»
+
+=== Traza S05 ===
+Tabla: buscar S05 — ausente
+Tabla: insertar S05 — alta tipo sesion
+--- Turno 1 CLIENTE ---
+Texto original: El internet está lentto.
+Tokens:
+  ART 'El'→el @S05/t1/d0
+  SUST_SERVICIO 'internet'→internet @S05/t1/d3
+  COPULA 'está'→esta @S05/t1/d12
+  ADJ_NEG 'lentto'→lento @S05/t1/d17 corrección→lento
+Estructura reconocida:
+  R1 aspecto=SERVICIO valoracion=NEGATIVA efecto=FALLA negado=False «El internet está lentto»
+Tabla: t1 buscar CLIENTE — ausente
+Tabla: t1 insertar CLIENTE — alta tipo participante
+Acción semántica: R1 actor=CLIENTE aspecto=SERVICIO valoracion=NEGATIVA efecto=FALLA negado=False «El internet está lentto»
+--- Turno 2 AGENTE ---
+Texto original: Quedó registrado el ticket TK-204.
+Tokens:
+  PALABRA 'Quedó'→quedo @S05/t2/d0
+  PALABRA 'registrado'→registrado @S05/t2/d6
+  ART 'el'→el @S05/t2/d17
+  PALABRA 'ticket'→ticket @S05/t2/d20
+  TICKET 'TK-204'→TK-204 @S05/t2/d27
+Estructura reconocida:
+  R15 aspecto=— valoracion=— efecto=— negado=False «Quedó registrado el ticket»
+Tabla: t2 buscar AGENTE — ausente
+Tabla: t2 insertar AGENTE — alta tipo participante
+Tabla: t2 buscar TK-204 — ausente
+Tabla: t2 insertar TK-204 — alta tipo ticket
+Acción semántica: R15 actor=AGENTE aspecto=— valoracion=— efecto=— negado=False «Quedó registrado el ticket»
+Resultado: análisis completo; estado NO_RESUELTO; SERVICIO NEGATIVA, ATENCION SIN_EVIDENCIA, CLARIDAD SIN_EVIDENCIA

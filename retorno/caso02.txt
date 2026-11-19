@@ -1,0 +1,30 @@
+Sesión S02 — completo — estado NO_RESUELTO
+  SERVICIO: NEGATIVA
+  ATENCION: POSITIVA
+  CLARIDAD: SIN_EVIDENCIA
+  Turno 1 CLIENTE: Me atendiste muy bien, pero sigo sin internet.
+    ATENCION POSITIVA (R9) «Me atendiste muy bien»
+    SERVICIO NEGATIVA (R8) «sigo sin internet»
+
+=== Traza S02 ===
+Tabla: buscar S02 — ausente
+Tabla: insertar S02 — alta tipo sesion
+--- Turno 1 CLIENTE ---
+Texto original: Me atendiste muy bien, pero sigo sin internet.
+Tokens:
+  ME 'Me'→me @S02/t1/d0
+  V_ATENCION 'atendiste'→atendiste @S02/t1/d3
+  MUY 'muy'→muy @S02/t1/d13
+  BIEN 'bien'→bien @S02/t1/d17
+  PERO 'pero'→pero @S02/t1/d23
+  V_PERS 'sigo'→sigo @S02/t1/d28
+  SIN 'sin'→sin @S02/t1/d33
+  SUST_SERVICIO 'internet'→internet @S02/t1/d37
+Estructura reconocida:
+  R9 aspecto=ATENCION valoracion=POSITIVA efecto=— negado=False «Me atendiste muy bien»
+  R8 aspecto=SERVICIO valoracion=NEGATIVA efecto=FALLA negado=False «sigo sin internet»
+Tabla: t1 buscar CLIENTE — ausente
+Tabla: t1 insertar CLIENTE — alta tipo participante
+Acción semántica: R9 actor=CLIENTE aspecto=ATENCION valoracion=POSITIVA efecto=— negado=False «Me atendiste muy bien»
+Acción semántica: R8 actor=CLIENTE aspecto=SERVICIO valoracion=NEGATIVA efecto=FALLA negado=False «sigo sin internet»
+Resultado: análisis completo; estado NO_RESUELTO; SERVICIO NEGATIVA, ATENCION POSITIVA, CLARIDAD SIN_EVIDENCIA

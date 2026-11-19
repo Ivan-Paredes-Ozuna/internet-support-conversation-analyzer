@@ -1,0 +1,46 @@
+Sesión S11 — parcial — estado NO_RESUELTO
+  SERVICIO: NEGATIVA
+  ATENCION: SIN_EVIDENCIA
+  CLARIDAD: SIN_EVIDENCIA
+  Error línea 3: ORDEN_INCONSISTENTE — 3 CLIENTE: Ahora funciona bien.
+  Turno 1 CLIENTE: El servicio está lento.
+    SERVICIO NEGATIVA (R1) «El servicio está lento»
+
+Sesión S11B — completo — estado NO_CONFIRMADO
+  SERVICIO: SIN_EVIDENCIA
+  ATENCION: SIN_EVIDENCIA
+  CLARIDAD: SIN_EVIDENCIA
+  Turno 1 CLIENTE: Gracias.
+    CORTESIA (R14) «Gracias»
+
+=== Traza S11 ===
+Tabla: buscar S11 — ausente
+Tabla: insertar S11 — alta tipo sesion
+--- Turno 1 CLIENTE ---
+Texto original: El servicio está lento.
+Tokens:
+  ART 'El'→el @S11/t1/d0
+  SUST_SERVICIO 'servicio'→servicio @S11/t1/d3
+  COPULA 'está'→esta @S11/t1/d12
+  ADJ_NEG 'lento'→lento @S11/t1/d17
+Estructura reconocida:
+  R1 aspecto=SERVICIO valoracion=NEGATIVA efecto=FALLA negado=False «El servicio está lento»
+Tabla: t1 buscar CLIENTE — ausente
+Tabla: t1 insertar CLIENTE — alta tipo participante
+Acción semántica: R1 actor=CLIENTE aspecto=SERVICIO valoracion=NEGATIVA efecto=FALLA negado=False «El servicio está lento»
+Rechazo línea 3 (ORDEN_INCONSISTENTE): 3 CLIENTE: Ahora funciona bien.
+Resultado: análisis parcial; estado NO_RESUELTO; SERVICIO NEGATIVA, ATENCION SIN_EVIDENCIA, CLARIDAD SIN_EVIDENCIA
+
+=== Traza S11B ===
+Tabla: buscar S11B — ausente
+Tabla: insertar S11B — alta tipo sesion
+--- Turno 1 CLIENTE ---
+Texto original: Gracias.
+Tokens:
+  CORTESIA 'Gracias'→gracias @S11B/t1/d0
+Estructura reconocida:
+  R14 aspecto=— valoracion=— efecto=CORTESIA negado=False «Gracias»
+Tabla: t1 buscar CLIENTE — ausente
+Tabla: t1 insertar CLIENTE — alta tipo participante
+Acción semántica: R14 actor=CLIENTE aspecto=— valoracion=— efecto=CORTESIA negado=False «Gracias»
+Resultado: análisis completo; estado NO_CONFIRMADO; SERVICIO SIN_EVIDENCIA, ATENCION SIN_EVIDENCIA, CLARIDAD SIN_EVIDENCIA

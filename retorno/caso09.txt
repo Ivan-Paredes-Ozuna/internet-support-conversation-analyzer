@@ -1,0 +1,32 @@
+Sesión S09 — completo — estado NO_RESUELTO
+  SERVICIO: NEGATIVA
+  ATENCION: POSITIVA
+  CLARIDAD: SIN_EVIDENCIA
+  Turno 1 CLIENTE: No funciona el internet, pero la atención fue muy buena.
+    SERVICIO NEGATIVA (R4 negado) «No funciona el internet»
+    ATENCION POSITIVA (R16) «la atención fue muy buena»
+
+=== Traza S09 ===
+Tabla: buscar S09 — ausente
+Tabla: insertar S09 — alta tipo sesion
+--- Turno 1 CLIENTE ---
+Texto original: No funciona el internet, pero la atención fue muy buena.
+Tokens:
+  NO 'No'→no @S09/t1/d0
+  FUNCIONA 'funciona'→funciona @S09/t1/d3
+  ART 'el'→el @S09/t1/d12
+  SUST_SERVICIO 'internet'→internet @S09/t1/d15
+  PERO 'pero'→pero @S09/t1/d25
+  ART 'la'→la @S09/t1/d30
+  SUST_ATENCION 'atención'→atencion @S09/t1/d33
+  COPULA 'fue'→fue @S09/t1/d42
+  MUY 'muy'→muy @S09/t1/d46
+  ADJ_ATENCION 'buena'→buena @S09/t1/d50
+Estructura reconocida:
+  R4 aspecto=SERVICIO valoracion=NEGATIVA efecto=FALLA negado=True «No funciona el internet»
+  R16 aspecto=ATENCION valoracion=POSITIVA efecto=— negado=False «la atención fue muy buena»
+Tabla: t1 buscar CLIENTE — ausente
+Tabla: t1 insertar CLIENTE — alta tipo participante
+Acción semántica: R4 actor=CLIENTE aspecto=SERVICIO valoracion=NEGATIVA efecto=FALLA negado=True «No funciona el internet»
+Acción semántica: R16 actor=CLIENTE aspecto=ATENCION valoracion=POSITIVA efecto=— negado=False «la atención fue muy buena»
+Resultado: análisis completo; estado NO_RESUELTO; SERVICIO NEGATIVA, ATENCION POSITIVA, CLARIDAD SIN_EVIDENCIA

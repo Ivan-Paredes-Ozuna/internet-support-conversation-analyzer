@@ -1,0 +1,49 @@
+Sesión S12 — completo — estado RESUELTO
+  SERVICIO: MIXTA
+  ATENCION: SIN_EVIDENCIA
+  CLARIDAD: SIN_EVIDENCIA
+  Turno 1 CLIENTE: La conexion está lenta.
+    SERVICIO NEGATIVA (R1) «La conexion está lenta»
+  Turno 2 AGENTE: Reinicie el router.
+    SOLICITUD (R12) «Reinicie el router»
+  Turno 3 CLIENTE: Ahora funciona bien.
+    SERVICIO POSITIVA (R2) «Ahora funciona bien»
+
+=== Traza S12 ===
+Tabla: buscar S12 — ausente
+Tabla: insertar S12 — alta tipo sesion
+--- Turno 1 CLIENTE ---
+Texto original: La conexion está lenta.
+Tokens:
+  ART 'La'→la @S12/t1/d0
+  SUST_SERVICIO 'conexion'→conexion @S12/t1/d3
+  COPULA 'está'→esta @S12/t1/d12
+  ADJ_NEG 'lenta'→lenta @S12/t1/d17
+Estructura reconocida:
+  R1 aspecto=SERVICIO valoracion=NEGATIVA efecto=FALLA negado=False «La conexion está lenta»
+Tabla: t1 buscar CLIENTE — ausente
+Tabla: t1 insertar CLIENTE — alta tipo participante
+Acción semántica: R1 actor=CLIENTE aspecto=SERVICIO valoracion=NEGATIVA efecto=FALLA negado=False «La conexion está lenta»
+--- Turno 2 AGENTE ---
+Texto original: Reinicie el router.
+Tokens:
+  V_SOLICITUD 'Reinicie'→reinicie @S12/t2/d0
+  ART 'el'→el @S12/t2/d9
+  SUST_SERVICIO 'router'→router @S12/t2/d12
+Estructura reconocida:
+  R12 aspecto=— valoracion=— efecto=SOLICITUD negado=False «Reinicie el router»
+Tabla: t2 buscar AGENTE — ausente
+Tabla: t2 insertar AGENTE — alta tipo participante
+Acción semántica: R12 actor=AGENTE aspecto=— valoracion=— efecto=SOLICITUD negado=False «Reinicie el router»
+--- Turno 3 CLIENTE ---
+Texto original: Ahora funciona bien.
+Tokens:
+  AHORA 'Ahora'→ahora @S12/t3/d0
+  FUNCIONA 'funciona'→funciona @S12/t3/d6
+  BIEN 'bien'→bien @S12/t3/d15
+Estructura reconocida:
+  R2 aspecto=SERVICIO valoracion=POSITIVA efecto=RECUPERACION negado=False «Ahora funciona bien»
+Tabla: t3 buscar CLIENTE — encontrado
+Tabla: t3 actualizar CLIENTE — aparición agregada
+Acción semántica: R2 actor=CLIENTE aspecto=SERVICIO valoracion=POSITIVA efecto=RECUPERACION negado=False «Ahora funciona bien»
+Resultado: análisis completo; estado RESUELTO; SERVICIO MIXTA, ATENCION SIN_EVIDENCIA, CLARIDAD SIN_EVIDENCIA

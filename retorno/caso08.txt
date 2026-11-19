@@ -1,0 +1,21 @@
+Sesión S08 — completo — estado NO_CONFIRMADO
+  SERVICIO: SIN_EVIDENCIA
+  ATENCION: SIN_EVIDENCIA
+  CLARIDAD: SIN_EVIDENCIA
+  Empate t1: lent (lenta, lento)
+  Turno 1 CLIENTE: lent.
+    NO_INTERPRETADO «lent»
+
+=== Traza S08 ===
+Tabla: buscar S08 — ausente
+Tabla: insertar S08 — alta tipo sesion
+--- Turno 1 CLIENTE ---
+Texto original: lent.
+Tokens:
+  PALABRA 'lent'→lent @S08/t1/d0 empate→lenta,lento
+Estructura reconocida:
+  R15 aspecto=— valoracion=— efecto=— negado=False «lent»
+Tabla: t1 buscar CLIENTE — ausente
+Tabla: t1 insertar CLIENTE — alta tipo participante
+Acción semántica: R15 actor=CLIENTE aspecto=— valoracion=— efecto=— negado=False «lent»
+Resultado: análisis completo; estado NO_CONFIRMADO; SERVICIO SIN_EVIDENCIA, ATENCION SIN_EVIDENCIA, CLARIDAD SIN_EVIDENCIA

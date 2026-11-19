@@ -1,0 +1,24 @@
+Sesión S10 — completo — estado NO_RESUELTO
+  SERVICIO: NEGATIVA
+  ATENCION: SIN_EVIDENCIA
+  CLARIDAD: SIN_EVIDENCIA
+  Corrección t1: conxion → conexion
+  Turno 1 CLIENTE: La conxion se corta.
+    SERVICIO NEGATIVA (R5) «La conxion se corta»
+
+=== Traza S10 ===
+Tabla: buscar S10 — ausente
+Tabla: insertar S10 — alta tipo sesion
+--- Turno 1 CLIENTE ---
+Texto original: La conxion se corta.
+Tokens:
+  ART 'La'→la @S10/t1/d0
+  SUST_SERVICIO 'conxion'→conexion @S10/t1/d3 corrección→conexion
+  SE 'se'→se @S10/t1/d11
+  CORTA 'corta'→corta @S10/t1/d14
+Estructura reconocida:
+  R5 aspecto=SERVICIO valoracion=NEGATIVA efecto=CORTE negado=False «La conxion se corta»
+Tabla: t1 buscar CLIENTE — ausente
+Tabla: t1 insertar CLIENTE — alta tipo participante
+Acción semántica: R5 actor=CLIENTE aspecto=SERVICIO valoracion=NEGATIVA efecto=CORTE negado=False «La conxion se corta»
+Resultado: análisis completo; estado NO_RESUELTO; SERVICIO NEGATIVA, ATENCION SIN_EVIDENCIA, CLARIDAD SIN_EVIDENCIA

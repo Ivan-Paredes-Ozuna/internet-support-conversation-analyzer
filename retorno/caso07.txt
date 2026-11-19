@@ -1,0 +1,61 @@
+Sesión S07 — parcial — estado NO_RESUELTO
+  SERVICIO: NEGATIVA
+  ATENCION: SIN_EVIDENCIA
+  CLARIDAD: SIN_EVIDENCIA
+  Error línea 3: ROL_INVALIDO — 2 SOPORTE: Intentamos ayudar.
+  Turno 1 CLIENTE: El servicio está lento.
+    SERVICIO NEGATIVA (R1) «El servicio está lento»
+  Turno 3 AGENTE: Reinicie el router.
+    SOLICITUD (R12) «Reinicie el router»
+
+Sesión S07B — completo — estado RESUELTO
+  SERVICIO: POSITIVA
+  ATENCION: SIN_EVIDENCIA
+  CLARIDAD: SIN_EVIDENCIA
+  Turno 1 CLIENTE: Ahora funciona bien.
+    SERVICIO POSITIVA (R2) «Ahora funciona bien»
+
+=== Traza S07 ===
+Tabla: buscar S07 — ausente
+Tabla: insertar S07 — alta tipo sesion
+--- Turno 1 CLIENTE ---
+Texto original: El servicio está lento.
+Tokens:
+  ART 'El'→el @S07/t1/d0
+  SUST_SERVICIO 'servicio'→servicio @S07/t1/d3
+  COPULA 'está'→esta @S07/t1/d12
+  ADJ_NEG 'lento'→lento @S07/t1/d17
+Estructura reconocida:
+  R1 aspecto=SERVICIO valoracion=NEGATIVA efecto=FALLA negado=False «El servicio está lento»
+Tabla: t1 buscar CLIENTE — ausente
+Tabla: t1 insertar CLIENTE — alta tipo participante
+Acción semántica: R1 actor=CLIENTE aspecto=SERVICIO valoracion=NEGATIVA efecto=FALLA negado=False «El servicio está lento»
+Rechazo línea 3 (ROL_INVALIDO): 2 SOPORTE: Intentamos ayudar.
+--- Turno 3 AGENTE ---
+Texto original: Reinicie el router.
+Tokens:
+  V_SOLICITUD 'Reinicie'→reinicie @S07/t3/d0
+  ART 'el'→el @S07/t3/d9
+  SUST_SERVICIO 'router'→router @S07/t3/d12
+Estructura reconocida:
+  R12 aspecto=— valoracion=— efecto=SOLICITUD negado=False «Reinicie el router»
+Tabla: t3 buscar AGENTE — ausente
+Tabla: t3 insertar AGENTE — alta tipo participante
+Acción semántica: R12 actor=AGENTE aspecto=— valoracion=— efecto=SOLICITUD negado=False «Reinicie el router»
+Resultado: análisis parcial; estado NO_RESUELTO; SERVICIO NEGATIVA, ATENCION SIN_EVIDENCIA, CLARIDAD SIN_EVIDENCIA
+
+=== Traza S07B ===
+Tabla: buscar S07B — ausente
+Tabla: insertar S07B — alta tipo sesion
+--- Turno 1 CLIENTE ---
+Texto original: Ahora funciona bien.
+Tokens:
+  AHORA 'Ahora'→ahora @S07B/t1/d0
+  FUNCIONA 'funciona'→funciona @S07B/t1/d6
+  BIEN 'bien'→bien @S07B/t1/d15
+Estructura reconocida:
+  R2 aspecto=SERVICIO valoracion=POSITIVA efecto=RECUPERACION negado=False «Ahora funciona bien»
+Tabla: t1 buscar CLIENTE — ausente
+Tabla: t1 insertar CLIENTE — alta tipo participante
+Acción semántica: R2 actor=CLIENTE aspecto=SERVICIO valoracion=POSITIVA efecto=RECUPERACION negado=False «Ahora funciona bien»
+Resultado: análisis completo; estado RESUELTO; SERVICIO POSITIVA, ATENCION SIN_EVIDENCIA, CLARIDAD SIN_EVIDENCIA

@@ -1,0 +1,31 @@
+Sesión S04 — completo — estado NO_CONFIRMADO
+  SERVICIO: SIN_EVIDENCIA
+  ATENCION: POSITIVA
+  CLARIDAD: NEGATIVA
+  Turno 1 CLIENTE: No entendí la explicación, pero el agente fue amable.
+    CLARIDAD NEGATIVA (R11 negado) «No entendí la explicación»
+    ATENCION POSITIVA (R10) «el agente fue amable»
+
+=== Traza S04 ===
+Tabla: buscar S04 — ausente
+Tabla: insertar S04 — alta tipo sesion
+--- Turno 1 CLIENTE ---
+Texto original: No entendí la explicación, pero el agente fue amable.
+Tokens:
+  NO 'No'→no @S04/t1/d0
+  V_CLARIDAD 'entendí'→entendi @S04/t1/d3
+  ART 'la'→la @S04/t1/d11
+  SUST_CLARIDAD 'explicación'→explicacion @S04/t1/d14
+  PERO 'pero'→pero @S04/t1/d27
+  ART 'el'→el @S04/t1/d32
+  AGENTE_SUST 'agente'→agente @S04/t1/d35
+  COPULA 'fue'→fue @S04/t1/d42
+  ADJ_ATENCION 'amable'→amable @S04/t1/d46
+Estructura reconocida:
+  R11 aspecto=CLARIDAD valoracion=NEGATIVA efecto=— negado=True «No entendí la explicación»
+  R10 aspecto=ATENCION valoracion=POSITIVA efecto=— negado=False «el agente fue amable»
+Tabla: t1 buscar CLIENTE — ausente
+Tabla: t1 insertar CLIENTE — alta tipo participante
+Acción semántica: R11 actor=CLIENTE aspecto=CLARIDAD valoracion=NEGATIVA efecto=— negado=True «No entendí la explicación»
+Acción semántica: R10 actor=CLIENTE aspecto=ATENCION valoracion=POSITIVA efecto=— negado=False «el agente fue amable»
+Resultado: análisis completo; estado NO_CONFIRMADO; SERVICIO SIN_EVIDENCIA, ATENCION POSITIVA, CLARIDAD NEGATIVA
