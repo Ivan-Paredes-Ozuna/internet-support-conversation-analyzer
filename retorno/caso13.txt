@@ -1,0 +1,27 @@
+Sesión S13 — completo — estado RESUELTO
+  SERVICIO: POSITIVA
+  ATENCION: SIN_EVIDENCIA
+  CLARIDAD: SIN_EVIDENCIA
+  Turno 1 CLIENTE: Ahora lento, pero funciona bien.
+    Error sintáctico: se esperaba FUNCIONA y llegó ADJ_NEG «lento»
+    SERVICIO POSITIVA (R3) «funciona bien»
+    NO_INTERPRETADO «Ahora lento»
+
+=== Traza S13 ===
+Tabla: buscar S13 — ausente
+Tabla: insertar S13 — alta tipo sesion
+--- Turno 1 CLIENTE ---
+Texto original: Ahora lento, pero funciona bien.
+Tokens:
+  AHORA 'Ahora'→ahora @S13/t1/d0
+  ADJ_NEG 'lento'→lento @S13/t1/d6
+  PERO 'pero'→pero @S13/t1/d13
+  FUNCIONA 'funciona'→funciona @S13/t1/d18
+  BIEN 'bien'→bien @S13/t1/d27
+Estructura reconocida:
+  R3 aspecto=SERVICIO valoracion=POSITIVA efecto=RECUPERACION negado=False «funciona bien»
+Error sintáctico t1: se esperaba FUNCIONA y llegó ADJ_NEG «lento»
+Tabla: t1 buscar CLIENTE — ausente
+Tabla: t1 insertar CLIENTE — alta tipo participante
+Acción semántica: R3 actor=CLIENTE aspecto=SERVICIO valoracion=POSITIVA efecto=RECUPERACION negado=False «funciona bien»
+Resultado: análisis completo; estado RESUELTO; SERVICIO POSITIVA, ATENCION SIN_EVIDENCIA, CLARIDAD SIN_EVIDENCIA

@@ -1,10 +1,16 @@
-"""Parser LL(1) por descenso recursivo, con un token de anticipación.
+"""Analizador sintáctico predictivo (ASP): pila, tabla LL(1) y un token de anticipación.
 
-La gramática está factorizada para que cada alternativa de Clausula arranque
-con un conjunto FIRST disjunto. Lo que no entra en una producción se rebobina
-y, si ninguna alternativa reconoce el tramo, se emite R15 (NO_INTERPRETADO)
-hasta el próximo «pero» o el fin del turno. Un ticket suelto igual se anota
-en la tabla de símbolos.
+La cima de la pila decide el paso. Un terminal que coincide se consume. Un no
+terminal se reemplaza por la producción que indica la tabla. Una acción
+dispara la regla semántica de esa producción.
+
+Un token fuera del FIRST de Clausula no es un error: es la producción
+Fragmento (R15). Si la producción elegida no se puede terminar, el modo pánico
+anota el error, descarta el tramo hasta «pero» o el fin del turno y sigue con
+la cláusula siguiente. No emite la regla a medias.
+
+CompServ, CompClar y RecurrenciaOpt miran uno o dos tokens más, como ya fija
+la gramática: no consumen un artículo ni un «todos» que no cierra la construcción.
 """
 
 from src.lexer import Token
@@ -30,8 +36,135 @@ from src.semantica import (
 )
 from src.tabla_simbolos import TablaSimbolos
 
-_FIN_DE_CLAUSULA = frozenset({"PERO", "EOF"})
-_ADJETIVO_ATENCION = frozenset({"ADJ_ATENCION", "BIEN"})
+_FIN = frozenset({"PERO", "EOF"})
+
+_REGLAS = {
+    "R1": r1_servicio_negativo,
+    "R2": r2_ahora_funciona,
+    "R3": r3_funciona,
+    "R4": r4_no_funciona,
+    "R5": r5_se_corta,
+    "R6": r6_se_corta_recurrente,
+    "R7": r7_sigue_negativo,
+    "R8": r8_sigo_sin,
+    "R9": r9_atencion_positiva,
+    "R10": r10_agente_amable,
+    "R11": r11_no_entendi,
+    "R12": r12_solicitud,
+    "R13": r13_compromiso,
+    "R14": r14_cortesia,
+    "R16": r16_atencion_nominal,
+    "R17": r17_servicio_bien,
+}
+
+# Qué anunciar cuando el no terminal no tiene producción para el lookahead.
+_ESPERADO = {
+    "RestoNo": "FUNCIONA o V_CLARIDAD",
+    "RestoPers": "ADJ_NEG o SIN",
+    "Resto": "PERO o fin de turno",
+    "Polaridad": "ADJ_NEG o BIEN",
+    "MuyAdj": "MUY, ADJ_ATENCION o BIEN",
+    "AdjAt": "ADJ_ATENCION o BIEN",
+    "Nominal": "SUST_SERVICIO, SUST_ATENCION, AGENTE_SUST o SUST_CLARIDAD",
+    "Predicado": "COPULA, ADJ_NEG, BIEN o SE",
+    "ObjetoSol": "ART o SUST_SERVICIO",
+    "Corte": "CORTA",
+    "Atencion": "ME o V_ATENCION",
+    "Clausula": "una cláusula",
+    "Enunciado": "una cláusula",
+}
+
+
+class Accion:
+    """Símbolo de pila: al desapilarlo se ejecuta la regla de la producción."""
+
+    def __init__(self, nombre: str, aspecto: str | None = None):
+        self.nombre = nombre
+        self.aspecto = aspecto
+
+    def __repr__(self) -> str:
+        return f"@{self.nombre}"
+
+
+def _a(nombre: str, aspecto: str | None = None) -> Accion:
+    return Accion(nombre, aspecto)
+
+
+# Tabla LL(1). La clave es (no terminal, lookahead). El valor es la producción,
+# de izquierda a derecha. La cadena vacía no se guarda: la decide _predecir.
+TABLA: dict[tuple[str, str], tuple] = {
+    ("Clausula", "NO"): ("NO", "RestoNo"),
+    ("Clausula", "AHORA"): ("AHORA", "FUNCIONA", "BienOpt", _a("R2")),
+    ("Clausula", "SE"): ("SE", "Corte"),
+    ("Clausula", "V_PERS"): ("V_PERS", "RestoPers"),
+    ("Clausula", "ME"): ("Atencion",),
+    ("Clausula", "V_ATENCION"): ("Atencion",),
+    ("Clausula", "ART"): ("ART", "Nominal"),
+    ("Clausula", "SUST_SERVICIO"): ("SUST_SERVICIO", "Predicado"),
+    ("Clausula", "V_SOLICITUD"): ("V_SOLICITUD", "ObjetoSol", _a("R12")),
+    ("Clausula", "V_COMPROMISO"): ("V_COMPROMISO", "TicketOpt", _a("R13")),
+    ("Clausula", "MANANA"): ("MANANA", "V_COMPROMISO", "TicketOpt", _a("R13")),
+    ("Clausula", "FUNCIONA"): ("FUNCIONA", "BienOpt", _a("R3")),
+    ("Clausula", "CORTESIA"): ("CORTESIA", _a("R14")),
+    ("Resto", "PERO"): ("PERO", "Clausula", _a("sobrante"), "Resto"),
+    ("RestoNo", "FUNCIONA"): ("FUNCIONA", "CompServ", _a("R4")),
+    ("RestoNo", "V_CLARIDAD"): ("V_CLARIDAD", "CompClar", _a("R11")),
+    ("RestoPers", "ADJ_NEG"): ("ADJ_NEG", _a("R7")),
+    ("RestoPers", "SIN"): ("SIN", "SUST_SERVICIO", _a("R8")),
+    ("Atencion", "ME"): ("ME", "V_ATENCION", "MuyAdj", _a("R9")),
+    ("Atencion", "V_ATENCION"): ("V_ATENCION", "MuyAdj", _a("R9")),
+    ("MuyAdj", "MUY"): ("MUY", "AdjAt"),
+    ("MuyAdj", "ADJ_ATENCION"): ("ADJ_ATENCION",),
+    ("MuyAdj", "BIEN"): ("BIEN",),
+    ("AdjAt", "ADJ_ATENCION"): ("ADJ_ATENCION",),
+    ("AdjAt", "BIEN"): ("BIEN",),
+    ("Nominal", "SUST_SERVICIO"): ("SUST_SERVICIO", "Predicado"),
+    ("Nominal", "SUST_ATENCION"): ("SUST_ATENCION", "COPULA", "MuyAdj", _a("R16")),
+    ("Nominal", "AGENTE_SUST"): ("AGENTE_SUST", "COPULA", "MuyAdj", _a("R10")),
+    ("Predicado", "COPULA"): ("COPULA", "MuyOpt", "Polaridad"),
+    ("Predicado", "ADJ_NEG"): ("ADJ_NEG", _a("R1")),
+    ("Predicado", "BIEN"): ("BIEN", _a("R17")),
+    ("Predicado", "SE"): ("SE", "Corte"),
+    ("Polaridad", "ADJ_NEG"): ("ADJ_NEG", _a("R1")),
+    ("Polaridad", "BIEN"): ("BIEN", _a("R17")),
+    ("ObjetoSol", "ART"): ("ART", "SUST_SERVICIO"),
+    ("ObjetoSol", "SUST_SERVICIO"): ("SUST_SERVICIO",),
+    ("Corte", "CORTA"): ("CORTA", "RecurrenciaOpt"),
+}
+
+TERMINALES = frozenset(
+    {
+        "ART",
+        "SUST_SERVICIO",
+        "ADJ_NEG",
+        "FUNCIONA",
+        "CORTA",
+        "BIEN",
+        "ADJ_ATENCION",
+        "V_ATENCION",
+        "V_CLARIDAD",
+        "SUST_CLARIDAD",
+        "SUST_ATENCION",
+        "V_SOLICITUD",
+        "V_COMPROMISO",
+        "V_PERS",
+        "AGENTE_SUST",
+        "ME",
+        "SE",
+        "SIN",
+        "COPULA",
+        "PERO",
+        "MUY",
+        "NO",
+        "AHORA",
+        "MANANA",
+        "TODOS",
+        "DIAS",
+        "CORTESIA",
+        "TICKET",
+        "EOF",
+    }
+)
 
 
 class Parser:
@@ -51,23 +184,176 @@ class Parser:
         self.turno = turno
         self.actor = actor
         self.i = 0
+        self.pila: list = []
+        self.clausulas: list = []
+        self.errores: list[dict] = []
         self.no_interpretados: list[str] = []
+        self.inicio_clausula = 0
+        self.clausula_abierta = False
 
     def parsear(self):
-        clausulas = []
+        self.clausulas = []
+        self.errores = []
+        self.no_interpretados = []
+        self.i = 0
+        self.clausula_abierta = False
         if self._mirar().tipo == "EOF":
-            return clausulas
-        reconocida = self._clausula()
-        if reconocida is not None:
-            clausulas.append(reconocida)
-        self._sobrantes()
-        while self._mirar().tipo == "PERO":
-            self._avanzar()
-            reconocida = self._clausula()
-            if reconocida is not None:
-                clausulas.append(reconocida)
-            self._sobrantes()
-        return clausulas
+            return []
+        self.pila = ["EOF", "Enunciado"]
+        for _ in range(10000):
+            if not self.pila:
+                break
+            cima = self.pila[-1]
+            if isinstance(cima, Accion):
+                self.pila.pop()
+                self._ejecutar(cima)
+                continue
+            if cima == "EOF":
+                if self._mirar().tipo == "EOF":
+                    self.pila.pop()
+                else:
+                    self._panico("fin de turno")
+                continue
+            if cima in TERMINALES:
+                if self._mirar().tipo == cima:
+                    self._consumir()
+                    self.pila.pop()
+                else:
+                    self._panico(cima)
+                continue
+            if cima == "Clausula":
+                self.inicio_clausula = self.i
+                self.clausula_abierta = True
+            produccion = self._predecir(cima, self._mirar().tipo)
+            if produccion is None:
+                self._panico(_ESPERADO.get(cima, cima))
+                continue
+            self.pila.pop()
+            if cima == "Clausula" and not produccion:
+                self.clausula_abierta = False
+            for simbolo in reversed(produccion):
+                self.pila.append(simbolo)
+        return self.clausulas
+
+    def _predecir(self, nt: str, tipo: str):
+        if nt == "Enunciado":
+            return ("Clausula", Accion("sobrante"), "Resto")
+        if nt == "BienOpt":
+            return ("BIEN",) if tipo == "BIEN" else ()
+        if nt == "MuyOpt":
+            return ("MUY",) if tipo == "MUY" else ()
+        if nt == "TicketOpt":
+            return ("TICKET",) if tipo == "TICKET" else ()
+        if nt == "CompServ":
+            if tipo == "ART" and self._en(1, "SUST_SERVICIO"):
+                return ("ART", "SUST_SERVICIO")
+            return ()
+        if nt == "CompClar":
+            if tipo == "ART" and self._en(1, "SUST_CLARIDAD"):
+                return ("ART", "SUST_CLARIDAD")
+            return ()
+        if nt == "RecurrenciaOpt":
+            if tipo == "TODOS" and self._en(1, "ART") and self._en(2, "DIAS"):
+                return ("TODOS", "ART", "DIAS", Accion("R6"))
+            return (Accion("R5"),)
+        if nt == "Clausula":
+            if tipo in _FIN:
+                return ()
+            if (nt, tipo) in TABLA:
+                return TABLA[(nt, tipo)]
+            return (Accion("fragmento"),)
+        if nt == "Nominal" and tipo == "SUST_CLARIDAD":
+            if self._en_fin(1):
+                return ("SUST_CLARIDAD", Accion("R18", "CLARIDAD"))
+            return None
+        if nt == "Predicado" and tipo in {"PERO", "EOF", "TICKET"}:
+            return (Accion("R18", "SERVICIO"),)
+        if nt == "Resto" and tipo == "EOF":
+            return ()
+        return TABLA.get((nt, tipo))
+
+    def _ejecutar(self, accion: Accion) -> None:
+        if accion.nombre == "fragmento":
+            self._fragmento()
+            return
+        if accion.nombre == "sobrante":
+            self._sobrante()
+            return
+        if accion.nombre == "R18":
+            self.clausulas.append(r18_mencion_neutra(self.actor, self._texto(self.inicio_clausula), accion.aspecto))
+        else:
+            self.clausulas.append(_REGLAS[accion.nombre](self.actor, self._texto(self.inicio_clausula)))
+        self.clausula_abierta = False
+
+    def _fragmento(self) -> None:
+        palabras = []
+        while self._mirar().tipo not in _FIN:
+            token = self._consumir()
+            if token.tipo != "TICKET":
+                palabras.append(token.lexema)
+        if palabras:
+            texto = " ".join(palabras)
+            self.no_interpretados.append(texto)
+            self.clausulas.append(r15_no_interpretado(self.actor, texto))
+        self.clausula_abierta = False
+
+    def _sobrante(self) -> None:
+        palabras = []
+        while self._mirar().tipo not in _FIN:
+            token = self._consumir()
+            if token.tipo != "TICKET":
+                palabras.append(token.lexema)
+        if palabras:
+            self.no_interpretados.append(" ".join(palabras))
+
+    def _panico(self, esperado: str) -> None:
+        """Descarta el tramo hasta «pero» o el fin y vacía la cláusula a medias."""
+        self._registrar(esperado)
+        desde = self.inicio_clausula if self.clausula_abierta else self.i
+        avanzo_entrada = False
+        while self._mirar().tipo not in _FIN:
+            self._consumir()
+            avanzo_entrada = True
+        self._volcar(desde)
+        fondo = len(self.pila)
+        while self.pila and not self._ancla(self.pila[-1]):
+            self.pila.pop()
+        if not avanzo_entrada and len(self.pila) == fondo and self.pila:
+            self.pila.pop()
+        self.clausula_abierta = False
+
+    def _registrar(self, esperado: str) -> None:
+        token = self._mirar()
+        if token.tipo == "EOF":
+            llegado = "el fin del turno"
+            cita = ""
+        else:
+            llegado = token.tipo
+            cita = f" «{token.lexema}»"
+        self.errores.append(
+            {
+                "turno": self.turno,
+                "tipo": "ERROR_SINTACTICO",
+                "esperado": esperado,
+                "encontrado": token.tipo,
+                "texto": token.lexema,
+                "mensaje": f"se esperaba {esperado} y llegó {llegado}{cita}",
+            }
+        )
+
+    def _volcar(self, desde: int) -> None:
+        palabras = [
+            token.lexema
+            for token in self.tokens[desde : self.i]
+            if token.tipo not in {"TICKET", "EOF"} and token.lexema
+        ]
+        if palabras:
+            self.no_interpretados.append(" ".join(palabras))
+
+    def _ancla(self, cima) -> bool:
+        if cima in {"EOF", "Resto"}:
+            return True
+        return isinstance(cima, Accion) and cima.nombre == "sobrante"
 
     def _mirar(self) -> Token:
         return self.tokens[self.i]
@@ -78,256 +364,22 @@ class Parser:
             return False
         return self.tokens[indice].tipo == tipo
 
-    def _avanzar(self) -> Token:
+    def _en_fin(self, salto: int) -> bool:
+        indice = self.i + salto
+        if indice >= len(self.tokens):
+            return True
+        return self.tokens[indice].tipo in _FIN
+
+    def _consumir(self) -> Token:
         token = self.tokens[self.i]
         self.i += 1
+        if token.tipo == "TICKET":
+            self.tabla.asegurar(
+                token.normalizado,
+                "ticket",
+                {"turno": self.turno, "desplazamiento": token.desplazamiento},
+            )
         return token
 
     def _texto(self, desde: int) -> str:
         return " ".join(token.lexema for token in self.tokens[desde : self.i] if token.tipo != "EOF")
-
-    def _registrar_ticket(self, token: Token) -> None:
-        aparicion = {"turno": self.turno, "desplazamiento": token.desplazamiento}
-        self.tabla.asegurar(token.normalizado, "ticket", aparicion)
-
-    def _clausula(self):
-        inicio = self.i
-        for alternativa in (
-            self._desde_no,
-            self._desde_ahora,
-            self._desde_se,
-            self._desde_persiste,
-            self._desde_atencion,
-            self._desde_nominal,
-            self._desde_servicio,
-            self._desde_solicitud,
-            self._desde_compromiso,
-            self._desde_manana,
-            self._desde_funciona,
-            self._desde_cortesia,
-        ):
-            self.i = inicio
-            atributos = alternativa(inicio)
-            if atributos is not None:
-                return atributos
-        self.i = inicio
-        return self._fragmento()
-
-    def _desde_no(self, inicio: int):
-        if self._mirar().tipo != "NO":
-            return None
-        self._avanzar()
-        if self._mirar().tipo == "FUNCIONA":
-            self._avanzar()
-            self._complemento("SUST_SERVICIO")
-            return r4_no_funciona(self.actor, self._texto(inicio))
-        if self._mirar().tipo == "V_CLARIDAD":
-            self._avanzar()
-            self._complemento("SUST_CLARIDAD")
-            return r11_no_entendi(self.actor, self._texto(inicio))
-        return None
-
-    def _complemento(self, sustantivo: str) -> None:
-        """Objeto opcional «artículo + sustantivo». Si el artículo no introduce ese sustantivo, no se consume."""
-        if self._mirar().tipo != "ART":
-            return
-        if not self._en(1, sustantivo):
-            return
-        self._avanzar()
-        self._avanzar()
-
-    def _desde_ahora(self, inicio: int):
-        if self._mirar().tipo != "AHORA":
-            return None
-        self._avanzar()
-        if self._mirar().tipo != "FUNCIONA":
-            return None
-        self._avanzar()
-        self._bien_opcional()
-        return r2_ahora_funciona(self.actor, self._texto(inicio))
-
-    def _desde_funciona(self, inicio: int):
-        if self._mirar().tipo != "FUNCIONA":
-            return None
-        self._avanzar()
-        self._bien_opcional()
-        return r3_funciona(self.actor, self._texto(inicio))
-
-    def _bien_opcional(self) -> None:
-        if self._mirar().tipo == "BIEN":
-            self._avanzar()
-
-    def _desde_se(self, inicio: int):
-        if self._mirar().tipo != "SE":
-            return None
-        self._avanzar()
-        return self._corte(inicio)
-
-    def _corte(self, inicio: int):
-        if self._mirar().tipo != "CORTA":
-            return None
-        self._avanzar()
-        if self._recurrencia():
-            return r6_se_corta_recurrente(self.actor, self._texto(inicio))
-        return r5_se_corta(self.actor, self._texto(inicio))
-
-    def _recurrencia(self) -> bool:
-        if self._mirar().tipo == "TODOS" and self._en(1, "ART") and self._en(2, "DIAS"):
-            self._avanzar()
-            self._avanzar()
-            self._avanzar()
-            return True
-        return False
-
-    def _desde_persiste(self, inicio: int):
-        if self._mirar().tipo != "V_PERS":
-            return None
-        self._avanzar()
-        if self._mirar().tipo == "ADJ_NEG":
-            self._avanzar()
-            return r7_sigue_negativo(self.actor, self._texto(inicio))
-        if self._mirar().tipo == "SIN" and self._en(1, "SUST_SERVICIO"):
-            self._avanzar()
-            self._avanzar()
-            return r8_sigo_sin(self.actor, self._texto(inicio))
-        return None
-
-    def _desde_atencion(self, inicio: int):
-        if self._mirar().tipo == "ME":
-            self._avanzar()
-        if self._mirar().tipo != "V_ATENCION":
-            return None
-        self._avanzar()
-        if not self._muy_y_adjetivo(_ADJETIVO_ATENCION):
-            return None
-        return r9_atencion_positiva(self.actor, self._texto(inicio))
-
-    def _muy_y_adjetivo(self, tipos: frozenset[str]) -> bool:
-        if self._mirar().tipo == "MUY":
-            self._avanzar()
-        if self._mirar().tipo not in tipos:
-            return False
-        self._avanzar()
-        return True
-
-    def _desde_nominal(self, inicio: int):
-        if self._mirar().tipo != "ART":
-            return None
-        self._avanzar()
-        tipo = self._mirar().tipo
-        if tipo == "SUST_SERVICIO":
-            self._avanzar()
-            return self._predicado_servicio(inicio)
-        if tipo in {"SUST_ATENCION", "AGENTE_SUST"}:
-            self._avanzar()
-            if self._mirar().tipo != "COPULA":
-                return None
-            self._avanzar()
-            if not self._muy_y_adjetivo(_ADJETIVO_ATENCION):
-                return None
-            if tipo == "AGENTE_SUST":
-                return r10_agente_amable(self.actor, self._texto(inicio))
-            return r16_atencion_nominal(self.actor, self._texto(inicio))
-        if tipo == "SUST_CLARIDAD":
-            self._avanzar()
-            if self._mirar().tipo not in _FIN_DE_CLAUSULA:
-                return None
-            return r18_mencion_neutra(self.actor, self._texto(inicio), "CLARIDAD")
-        return None
-
-    def _desde_servicio(self, inicio: int):
-        if self._mirar().tipo != "SUST_SERVICIO":
-            return None
-        self._avanzar()
-        return self._predicado_servicio(inicio)
-
-    def _predicado_servicio(self, inicio: int):
-        tipo = self._mirar().tipo
-        if tipo in _FIN_DE_CLAUSULA or tipo == "TICKET":
-            return r18_mencion_neutra(self.actor, self._texto(inicio), "SERVICIO")
-        if tipo == "COPULA":
-            self._avanzar()
-            if self._mirar().tipo == "MUY":
-                self._avanzar()
-            if self._mirar().tipo == "ADJ_NEG":
-                self._avanzar()
-                return r1_servicio_negativo(self.actor, self._texto(inicio))
-            if self._mirar().tipo == "BIEN":
-                self._avanzar()
-                return r17_servicio_bien(self.actor, self._texto(inicio))
-            return None
-        if tipo == "ADJ_NEG":
-            self._avanzar()
-            return r1_servicio_negativo(self.actor, self._texto(inicio))
-        if tipo == "BIEN":
-            self._avanzar()
-            return r17_servicio_bien(self.actor, self._texto(inicio))
-        if tipo == "SE":
-            self._avanzar()
-            return self._corte(inicio)
-        return None
-
-    def _desde_solicitud(self, inicio: int):
-        if self._mirar().tipo != "V_SOLICITUD":
-            return None
-        self._avanzar()
-        if self._mirar().tipo == "ART":
-            self._avanzar()
-        if self._mirar().tipo != "SUST_SERVICIO":
-            return None
-        self._avanzar()
-        return r12_solicitud(self.actor, self._texto(inicio))
-
-    def _desde_compromiso(self, inicio: int):
-        if self._mirar().tipo != "V_COMPROMISO":
-            return None
-        self._avanzar()
-        self._ticket_opcional()
-        return r13_compromiso(self.actor, self._texto(inicio))
-
-    def _desde_manana(self, inicio: int):
-        if self._mirar().tipo != "MANANA":
-            return None
-        self._avanzar()
-        if self._mirar().tipo != "V_COMPROMISO":
-            return None
-        self._avanzar()
-        self._ticket_opcional()
-        return r13_compromiso(self.actor, self._texto(inicio))
-
-    def _ticket_opcional(self) -> None:
-        if self._mirar().tipo == "TICKET":
-            self._registrar_ticket(self._avanzar())
-
-    def _desde_cortesia(self, inicio: int):
-        if self._mirar().tipo != "CORTESIA":
-            return None
-        self._avanzar()
-        return r14_cortesia(self.actor, self._texto(inicio))
-
-    def _fragmento(self):
-        if self._mirar().tipo in _FIN_DE_CLAUSULA:
-            return None
-        palabras = []
-        while self._mirar().tipo not in _FIN_DE_CLAUSULA:
-            token = self._avanzar()
-            if token.tipo == "TICKET":
-                self._registrar_ticket(token)
-            else:
-                palabras.append(token.lexema)
-        if not palabras:
-            return None
-        texto = " ".join(palabras)
-        self.no_interpretados.append(texto)
-        return r15_no_interpretado(self.actor, texto)
-
-    def _sobrantes(self) -> None:
-        palabras = []
-        while self._mirar().tipo not in _FIN_DE_CLAUSULA:
-            token = self._avanzar()
-            if token.tipo == "TICKET":
-                self._registrar_ticket(token)
-            else:
-                palabras.append(token.lexema)
-        if palabras:
-            self.no_interpretados.append(" ".join(palabras))

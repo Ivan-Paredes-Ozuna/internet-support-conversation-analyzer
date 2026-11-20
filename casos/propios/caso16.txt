@@ -1,0 +1,4 @@
+SESION S16
+1 AGENTE: Reinicie.
+2 CLIENTE: Sigue lento.
+FIN

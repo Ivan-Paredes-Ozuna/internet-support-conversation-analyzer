@@ -1,0 +1,3 @@
+SESION S13
+1 CLIENTE: Ahora lento, pero funciona bien.
+FIN

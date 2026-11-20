@@ -1,0 +1,33 @@
+Sesión S16 — completo — estado NO_RESUELTO
+  SERVICIO: NEGATIVA
+  ATENCION: SIN_EVIDENCIA
+  CLARIDAD: SIN_EVIDENCIA
+  Turno 1 AGENTE: Reinicie.
+    Error sintáctico: se esperaba ART o SUST_SERVICIO y llegó el fin del turno
+    NO_INTERPRETADO «Reinicie»
+  Turno 2 CLIENTE: Sigue lento.
+    SERVICIO NEGATIVA (R7) «Sigue lento»
+
+=== Traza S16 ===
+Tabla: buscar S16 — ausente
+Tabla: insertar S16 — alta tipo sesion
+--- Turno 1 AGENTE ---
+Texto original: Reinicie.
+Tokens:
+  V_SOLICITUD 'Reinicie'→reinicie @S16/t1/d0
+Estructura reconocida:
+  (ninguna)
+Error sintáctico t1: se esperaba ART o SUST_SERVICIO y llegó el fin del turno
+Tabla: t1 buscar AGENTE — ausente
+Tabla: t1 insertar AGENTE — alta tipo participante
+--- Turno 2 CLIENTE ---
+Texto original: Sigue lento.
+Tokens:
+  V_PERS 'Sigue'→sigue @S16/t2/d0
+  ADJ_NEG 'lento'→lento @S16/t2/d6
+Estructura reconocida:
+  R7 aspecto=SERVICIO valoracion=NEGATIVA efecto=FALLA negado=False «Sigue lento»
+Tabla: t2 buscar CLIENTE — ausente
+Tabla: t2 insertar CLIENTE — alta tipo participante
+Acción semántica: R7 actor=CLIENTE aspecto=SERVICIO valoracion=NEGATIVA efecto=FALLA negado=False «Sigue lento»
+Resultado: análisis completo; estado NO_RESUELTO; SERVICIO NEGATIVA, ATENCION SIN_EVIDENCIA, CLARIDAD SIN_EVIDENCIA

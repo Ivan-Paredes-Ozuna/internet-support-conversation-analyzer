@@ -1,0 +1,4 @@
+SESION S14
+1 CLIENTE: El servicio está.
+2 AGENTE: Reinicie el router.
+FIN

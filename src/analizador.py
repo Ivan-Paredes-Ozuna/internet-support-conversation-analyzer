@@ -26,6 +26,7 @@ class TurnoAnalizado:
     correcciones: list[dict]
     abstenciones: list[dict]
     tokens: list
+    errores_sintacticos: list
 
 
 @dataclass
@@ -229,6 +230,15 @@ def _analizar_turno(actual: dict, numero: int, rol: str, texto: str, diccionario
             "no_interpretados": list(parser.no_interpretados),
         }
     )
+    for error in parser.errores:
+        eventos.append(
+            {
+                "tipo": "error_sintactico",
+                "sesion": actual["id"],
+                "turno": numero,
+                "mensaje": error["mensaje"],
+            }
+        )
     eventos.extend(ops)
     for clausula in clausulas:
         eventos.append(
@@ -255,6 +265,7 @@ def _analizar_turno(actual: dict, numero: int, rol: str, texto: str, diccionario
         correcciones=correcciones,
         abstenciones=abstenciones,
         tokens=tokens,
+        errores_sintacticos=list(parser.errores),
     )
 
 

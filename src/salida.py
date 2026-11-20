@@ -106,6 +106,8 @@ def a_consola(resultado: Resultado) -> str:
             lineas.append(f"  Error línea {error['linea']}: {error['tipo']} — {error['texto']}")
         for turno in sesion.turnos:
             lineas.append(f"  Turno {turno.numero} {turno.rol}: {turno.texto}")
+            for error in turno.errores_sintacticos:
+                lineas.append(f"    Error sintáctico: {error['mensaje']}")
             for clausula in turno.clausulas:
                 if clausula.regla == "R15":
                     continue

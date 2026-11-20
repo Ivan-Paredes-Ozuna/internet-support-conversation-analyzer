@@ -1,0 +1,36 @@
+Sesión S14 — completo — estado NO_CONFIRMADO
+  SERVICIO: SIN_EVIDENCIA
+  ATENCION: SIN_EVIDENCIA
+  CLARIDAD: SIN_EVIDENCIA
+  Turno 1 CLIENTE: El servicio está.
+    Error sintáctico: se esperaba ADJ_NEG o BIEN y llegó el fin del turno
+    NO_INTERPRETADO «El servicio está»
+  Turno 2 AGENTE: Reinicie el router.
+    SOLICITUD (R12) «Reinicie el router»
+
+=== Traza S14 ===
+Tabla: buscar S14 — ausente
+Tabla: insertar S14 — alta tipo sesion
+--- Turno 1 CLIENTE ---
+Texto original: El servicio está.
+Tokens:
+  ART 'El'→el @S14/t1/d0
+  SUST_SERVICIO 'servicio'→servicio @S14/t1/d3
+  COPULA 'está'→esta @S14/t1/d12
+Estructura reconocida:
+  (ninguna)
+Error sintáctico t1: se esperaba ADJ_NEG o BIEN y llegó el fin del turno
+Tabla: t1 buscar CLIENTE — ausente
+Tabla: t1 insertar CLIENTE — alta tipo participante
+--- Turno 2 AGENTE ---
+Texto original: Reinicie el router.
+Tokens:
+  V_SOLICITUD 'Reinicie'→reinicie @S14/t2/d0
+  ART 'el'→el @S14/t2/d9
+  SUST_SERVICIO 'router'→router @S14/t2/d12
+Estructura reconocida:
+  R12 aspecto=— valoracion=— efecto=SOLICITUD negado=False «Reinicie el router»
+Tabla: t2 buscar AGENTE — ausente
+Tabla: t2 insertar AGENTE — alta tipo participante
+Acción semántica: R12 actor=AGENTE aspecto=— valoracion=— efecto=SOLICITUD negado=False «Reinicie el router»
+Resultado: análisis completo; estado NO_CONFIRMADO; SERVICIO SIN_EVIDENCIA, ATENCION SIN_EVIDENCIA, CLARIDAD SIN_EVIDENCIA

@@ -117,6 +117,43 @@ class CasosPropios(unittest.TestCase):
         self.assertEqual(siguiente["analisis"], "completo")
         self.assertEqual(siguiente["estado"], "NO_CONFIRMADO")
 
+    def test_13_panico_sigue_despues_de_pero(self):
+        resultado = caso("caso13.txt")
+        sesion = resultado.sesiones[0]
+        datos = sesion_a_dict(sesion)
+        self.assertEqual(datos["analisis"], "completo")
+        self.assertEqual(datos["estado"], "RESUELTO")
+        self.assertEqual([item["regla"] for item in datos["evidencias"]], ["R3"])
+        self.assertEqual(sesion.turnos[0].no_interpretados, ["Ahora lento"])
+        self.assertIn("FUNCIONA", sesion.turnos[0].errores_sintacticos[0]["mensaje"])
+
+    def test_14_falta_el_adjetivo_y_el_turno_siguiente_sigue(self):
+        sesion = caso("caso14.txt").sesiones[0]
+        datos = sesion_a_dict(sesion)
+        self.assertEqual(datos["estado"], "NO_CONFIRMADO")
+        self.assertEqual(datos["resumen_por_aspecto"]["SERVICIO"], "SIN_EVIDENCIA")
+        self.assertEqual([item["regla"] for item in datos["evidencias"]], ["R12"])
+        self.assertEqual(sesion.turnos[0].no_interpretados, ["El servicio está"])
+        self.assertIn("ADJ_NEG o BIEN", sesion.turnos[0].errores_sintacticos[0]["mensaje"])
+
+    def test_15_no_sin_verbo_y_la_atencion_si_cierra(self):
+        sesion = caso("caso15.txt").sesiones[0]
+        datos = sesion_a_dict(sesion)
+        self.assertEqual(datos["estado"], "NO_CONFIRMADO")
+        self.assertEqual(datos["resumen_por_aspecto"]["ATENCION"], "POSITIVA")
+        self.assertEqual([item["regla"] for item in datos["evidencias"]], ["R16"])
+        self.assertEqual(sesion.turnos[0].no_interpretados, ["No"])
+        self.assertIn("FUNCIONA o V_CLARIDAD", sesion.turnos[0].errores_sintacticos[0]["mensaje"])
+
+    def test_16_solicitud_incompleta_no_pisa_al_cliente(self):
+        sesion = caso("caso16.txt").sesiones[0]
+        datos = sesion_a_dict(sesion)
+        self.assertEqual(datos["estado"], "NO_RESUELTO")
+        self.assertEqual(datos["resumen_por_aspecto"]["SERVICIO"], "NEGATIVA")
+        self.assertEqual([item["regla"] for item in datos["evidencias"]], ["R7"])
+        self.assertEqual(sesion.turnos[0].no_interpretados, ["Reinicie"])
+        self.assertEqual(sesion.turnos[1].errores_sintacticos, [])
+
 
 class Construcciones(unittest.TestCase):
     def _una(self, texto: str) -> dict:

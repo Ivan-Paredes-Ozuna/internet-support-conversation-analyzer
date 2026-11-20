@@ -40,7 +40,7 @@ Cada turno lleva número consecutivo desde 1, rol `CLIENTE` o `AGENTE`, dos punt
 - AFD del ticket `TK-[0-9]{3,6}`: [src/afd_ticket.py](src/afd_ticket.py)
 - Corrección por Levenshtein: [src/levenshtein.py](src/levenshtein.py), vocabulario en [diccionario/vocabulario.txt](diccionario/vocabulario.txt)
 - Tabla de símbolos (hash con encadenamiento): [src/tabla_simbolos.py](src/tabla_simbolos.py)
-- Gramática y parser LL(1): [src/parser.py](src/parser.py)
+- Gramática y analizador sintáctico predictivo (pila, tabla LL(1), modo pánico): [src/parser.py](src/parser.py)
 - Reglas, resumen y estado: [src/semantica.py](src/semantica.py)
 - Recuperación de turnos: [src/analizador.py](src/analizador.py)
 - JSON, consola y traza: [src/salida.py](src/salida.py), [src/traza.py](src/traza.py)
@@ -49,4 +49,4 @@ El informe de las decisiones está en [INFORME.md](INFORME.md). Para entregar, e
 
 ## Casos
 
-Ocho de la guía en [casos/guia](casos/guia) y cuatro propios en [casos/propios](casos/propios). El 12 es el de regresión: «la conexión está lenta» y después «ahora funciona bien» debe seguir en `SERVICIO MIXTA` y `RESUELTO`. [ejemplos/lote.txt](ejemplos/lote.txt) junta los doce en un solo archivo. [ejemplos/salida.json](ejemplos/salida.json) es el JSON de `casos/`, con los números de línea de cada archivo.
+Ocho de la guía en [casos/guia](casos/guia) y ocho propios en [casos/propios](casos/propios). El 12 es el de regresión: «la conexión está lenta» y después «ahora funciona bien» debe seguir en `SERVICIO MIXTA` y `RESUELTO`. El 13 al 16 hacen fallar una producción a medias para ver el modo pánico del analizador sintáctico. [ejemplos/lote.txt](ejemplos/lote.txt) junta los doce primeros en un solo archivo. [ejemplos/salida.json](ejemplos/salida.json) es el JSON de esos doce, con los números de línea de cada archivo.

@@ -1,6 +1,6 @@
 # Informe técnico
 
-Analizador determinista de sesiones de soporte de internet. El dominio es falta de conexión, lentitud, cortes, reinicio del router y seguimiento de tickets. No interpreta español libre, ironía ni audio: si una construcción no está en la gramática, queda `NO_INTERPRETADO`.
+Analizador determinista de sesiones de soporte de internet. El dominio es falta de conexión, lentitud, cortes, reinicio del router y seguimiento de tickets. No interpreta español libre, ironía ni audio. Si una palabra no entra en el FIRST de ninguna alternativa, queda `NO_INTERPRETADO`. Si una producción empieza y no se puede terminar, el analizador sintáctico lo informa y se recupera.
 
 El diccionario de vocabulario y la tabla de símbolos son estructuras distintas. El primero clasifica y corrige palabras. La segunda registra, por sesión, el identificador, los roles y los tickets.
 
@@ -10,7 +10,7 @@ El diccionario de vocabulario y la tabla de símbolos son estructuras distintas.
 2. Cada texto de turno se normaliza solo para clasificar.
 3. Se corrige con Levenshtein, distancia 1 y candidato único.
 4. El léxico emite tokens con sesión, turno y desplazamiento.
-5. El parser LL(1) arma cláusulas y dispara una acción semántica por producción.
+5. El analizador sintáctico predictivo arma cláusulas con pila y tabla LL(1), dispara una acción por producción y, si la producción no cierra, se recupera en modo pánico.
 6. La tabla de símbolos inserta o actualiza roles y tickets.
 7. Se resume cada aspecto y se infiere el estado.
 
@@ -147,7 +147,23 @@ Decisiones anulables, con FIRST y FOLLOW disjuntos:
 
 `Nominal` elige por un token entre `SUST_SERVICIO`, `SUST_ATENCION`, `AGENTE_SUST` y `SUST_CLARIDAD`. `RestoNo` elige entre `FUNCIONA` y `V_CLARIDAD`. `RestoPers` elige entre `ADJ_NEG` y `SIN`.
 
-Si la alternativa que corresponde al primer token no se puede terminar, se rebobina ese intento y el tramo, hasta `pero` o el fin, sale como fragmento `R15`. Ninguna otra alternativa tiene el mismo primer token, así que no hay una segunda lectura exitosa del mismo inicio.
+Ninguna otra alternativa tiene el mismo primer token, así que la tabla tiene una sola casilla por lookahead.
+
+### Analizador sintáctico predictivo
+
+El reconocimiento es un ASP. Hay una pila de símbolos, la tabla LL(1) y un token de anticipación. La pila arranca con `Enunciado` y el fin de turno. En cada paso se mira la cima:
+
+- Si es un terminal y coincide con el lookahead, se desapila y se consume el token.
+- Si es un no terminal, la tabla dice qué producción apilar. `BienOpt`, `TicketOpt` y `MuyOpt` reducen ε cuando el lookahead no es el suyo. `CompServ`, `CompClar` y `RecurrenciaOpt` miran el token siguiente, para no consumir un artículo ni un `todos` que no cierra la construcción.
+- Si es una acción, se desapila y se ejecuta la regla semántica de esa producción.
+
+Un token que no está en el FIRST de `Clausula` no es un error: es la producción `Fragmento` (R15).
+
+### Modo pánico
+
+Si la cima es un terminal que no coincide, o el no terminal no tiene producción para ese lookahead, hay un error sintáctico. No se emite la regla de esa cláusula. Se anota `se esperaba X y llegó Y`, se descartan los tokens del tramo hasta `pero` o el fin del turno, y se vacía la pila hasta el ancla de la cláusula (`Resto` o el sobrante). El análisis sigue en la cláusula siguiente. El tramo descartado queda `NO_INTERPRETADO`.
+
+Ese error no rechaza el turno ni deja la sesión `parcial`. El análisis parcial sigue reservado a los errores de formato: rol, orden, línea inválida, texto vacío, línea en blanco o `FIN` ausente. Esos se resuelven antes, al separar las sesiones.
 
 ## Acciones semánticas
 
@@ -194,7 +210,7 @@ La sesión es `parcial` solo cuando se rechazó algo de la forma (rol, orden, l�
 
 ## Casos
 
-Los ocho primeros son los de la guía. El 09 al 12 son propios: negación con contraste, corrección única, orden inconsistente y regresión por sinónimo. La salida obtenida es la que fijan las pruebas.
+Los ocho primeros son los de la guía. El 09 al 12 son propios: negación con contraste, corrección única, orden inconsistente y regresión por sinónimo. El 13 al 16 también son propios y ejercitan el modo pánico del analizador sintáctico: una producción que no cierra, la recuperación en `pero` y el turno siguiente, que se sigue analizando. La salida obtenida es la que fijan las pruebas.
 
 | Caso | Qué se comprueba | Obtenido |
 | --- | --- | --- |
@@ -210,6 +226,10 @@ Los ocho primeros son los de la guía. El 09 al 12 son propios: negación con co
 | 10 | `conxion` | corrige a `conexion`, servicio negativo |
 | 11 | el turno 3 llega sin el 2 | rechaza ese turno, no aplica «funciona bien», sesión parcial |
 | 12 | regresión con `conexion` / `lenta` | igual que el 01: `MIXTA`, `RESUELTO` |
+| 13 | «ahora lento, pero funciona bien» | error sintáctico, no emite R2; después R3 y `RESUELTO` |
+| 14 | «el servicio está» sin adjetivo, y luego el agente pide reiniciar | no emite R1; el turno 2 sigue y es R12; `NO_CONFIRMADO` |
+| 15 | «no, pero la atención fue muy buena» | error en la negación; R16 y atención positiva |
+| 16 | «reinicie» sin objeto, y el cliente dice que sigue lento | no emite R12; R7 y `NO_RESUELTO` |
 
 El caso 12 vuelve a pasar por R1 y R2 con otro sustantivo y otro adjetivo negativo. Si se cambia una de esas reglas, `pruebas/test_regresion.py` tiene que seguir en verde junto con el caso 01.
 
@@ -220,7 +240,3 @@ Hay además pruebas de «sigue lento», «funciona bien», «se corta» sin recu
 Un lote produce un JSON con `sesiones`. Cada una trae id, análisis `completo` o `parcial`, valoraciones por turno, resumen, estado, participantes, tickets con apariciones, correcciones, empates, errores y evidencias (turno, fragmento, regla, actor, negación). La consola repite eso en texto.
 
 La traza de S01 está en [ejemplos/traza_s01.txt](ejemplos/traza_s01.txt). El orden es el del enunciado: texto original, tokens con posición, estructura, búsqueda e inserción en la tabla, acción semántica y resultado. En el turno 3 se ve `buscar CLIENTE — encontrado` y `actualizar`, porque el rol ya existía. El JSON del directorio `casos/` está en [ejemplos/salida.json](ejemplos/salida.json).
-
-## Bibliotecas
-
-Ninguna fuera de la biblioteca estándar. La declaración de IA y el lugar para los nombres del grupo están en [DECLARACION_IA.md](DECLARACION_IA.md).

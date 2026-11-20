@@ -1,0 +1,29 @@
+Sesión S15 — completo — estado NO_CONFIRMADO
+  SERVICIO: SIN_EVIDENCIA
+  ATENCION: POSITIVA
+  CLARIDAD: SIN_EVIDENCIA
+  Turno 1 CLIENTE: No, pero la atención fue muy buena.
+    Error sintáctico: se esperaba FUNCIONA o V_CLARIDAD y llegó PERO «pero»
+    ATENCION POSITIVA (R16) «la atención fue muy buena»
+    NO_INTERPRETADO «No»
+
+=== Traza S15 ===
+Tabla: buscar S15 — ausente
+Tabla: insertar S15 — alta tipo sesion
+--- Turno 1 CLIENTE ---
+Texto original: No, pero la atención fue muy buena.
+Tokens:
+  NO 'No'→no @S15/t1/d0
+  PERO 'pero'→pero @S15/t1/d4
+  ART 'la'→la @S15/t1/d9
+  SUST_ATENCION 'atención'→atencion @S15/t1/d12
+  COPULA 'fue'→fue @S15/t1/d21
+  MUY 'muy'→muy @S15/t1/d25
+  ADJ_ATENCION 'buena'→buena @S15/t1/d29
+Estructura reconocida:
+  R16 aspecto=ATENCION valoracion=POSITIVA efecto=— negado=False «la atención fue muy buena»
+Error sintáctico t1: se esperaba FUNCIONA o V_CLARIDAD y llegó PERO «pero»
+Tabla: t1 buscar CLIENTE — ausente
+Tabla: t1 insertar CLIENTE — alta tipo participante
+Acción semántica: R16 actor=CLIENTE aspecto=ATENCION valoracion=POSITIVA efecto=— negado=False «la atención fue muy buena»
+Resultado: análisis completo; estado NO_CONFIRMADO; SERVICIO SIN_EVIDENCIA, ATENCION POSITIVA, CLARIDAD SIN_EVIDENCIA

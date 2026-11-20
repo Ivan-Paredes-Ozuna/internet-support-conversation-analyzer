@@ -35,6 +35,8 @@ def formatear(eventos: list[dict]) -> str:
                 f"valoracion={_mostrar(evento['valoracion'])} efecto={_mostrar(evento['efecto'])} "
                 f"negado={evento['negado']} «{evento['fragmento']}»"
             )
+        elif tipo == "error_sintactico":
+            lineas.append(f"Error sintáctico t{evento['turno']}: {evento['mensaje']}")
         elif tipo == "rechazo":
             lineas.append(f"Rechazo línea {evento['linea']} ({evento['motivo']}): {evento['texto']}")
         elif tipo == "resultado":
